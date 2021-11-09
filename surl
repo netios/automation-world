@@ -1,6 +1,9 @@
 GITHUBURL=$(echo $1 | awk -F\\ '{print $1}')
 GITHUBTOKEN=$(echo $1 | awk -F= '{print $2}')
+GITHUBFILE=$(echo $1 | sed 's/.*\///' | cut -d\\ -f1)
+
 echo $GITHUBURL
 echo $GITHUBTOKEN
+echo $GITHUBFILE
 
-curl -H "Authorization: token ${GITHUBTOKEN}" -H 'Accept: application/vnd.github.v3.raw' -O -L ${GITHUBURL}
+curl -H "Authorization: token ${GITHUBTOKEN}" -H 'Accept: application/vnd.github.v3.raw' -o ${GITHUBFILE} -L ${GITHUBURL}
