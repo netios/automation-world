@@ -1,5 +1,5 @@
-GITHUBURL=$(echo $1 | awk -F?token= '{print $1}')
-GITHUBTOKEN=$(echo $1 | awk -F?token= '{print $2}')
+GITHUBURL=$(echo $1 | awk -F\\ '{print $1}')
+GITHUBTOKEN=$(echo $1 | aawk -F= '{print $2}')
 echo $GITHUBURL
 echo $GITHUBTOKEN
 
