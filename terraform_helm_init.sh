@@ -15,3 +15,7 @@ echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt
 sudo apt-get update
 sudo apt-get install helm
 helm version
+
+# other
+sudo apt-get install tree
+sudo apt-get autoremove
