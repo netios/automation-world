@@ -1,10 +1,13 @@
-GITHUBURL=`echo $1 | sed 's/\\?.*//'`
-GITHUBTOKEN=`echo $1 | awk -F= '{print $2}'`
-GITHUBFILE=`echo $1 | sed 's/.*\///' | cut -d\\ -f1`
+#GITHUBURL=`echo $1 | sed 's/\\?.*//'`
+#GITHUBTOKEN=`echo $1 | awk -F= '{print $2}'`
+GITHUBFILE=`echo $1 | sed 's/.*\///' | sed 's/\\?.*$//`
 
-echo $GITHUBURL
-echo $GITHUBTOKEN
-echo $GITHUBFILE
+#echo $GITHUBURL
+#echo $GITHUBTOKEN
+#echo $GITHUBFILE
 
 #curl -H "Authorization: token ${GITHUBTOKEN}" -H 'Accept: application/vnd.github.v3.raw' -o ${GITHUBFILE} -L ${GITHUBURL}
-curl -o ${GITHUBFILE} ${GITHUBURL}
+curl -o ${GITHUBFILE} $1
+
+# how to use
+# sh surl <--here github private url ex.https://raw.githubusercontent.com/....-->
