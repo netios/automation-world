@@ -1,6 +1,6 @@
 sudo apt install zsh -y
 wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
-sh install.sh -y
+sh install.sh                    # default Y
 sed -i "s/\=\"robbyrussell/\=\"jonathan/g" ~/.zshrc
 sed -i "\$aalias h=\"history -i\"" ~/.zshrc
 sed -i "\$aalias hs=\"history -i | grep\"" ~/.zshrc
@@ -24,10 +24,10 @@ setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording en
 setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
 setopt HIST_BEEP                 # Beep when accessing nonexistent history.
 #_____ remap key
-bindkey "\033[1~" beginning-of-line
-bindkey "\033[4~" end-of-line
-bindkey '\e\e[C' forward-word
-bindkey '\e\e[D' backward-word 
+bindkey "\033[1~" beginning-of-line   # zsh: home key
+bindkey "\033[4~" end-of-line         # zsh: end key
+bindkey '\e\e[C' forward-word         # zsh: ctrl + alt + right arrow key
+bindkey '\e\e[D' backward-word        # zsh: ctrl + alt + left arrow key
 EOF
 echo "#_____ [zsh_plugin] Auto Suggestions" >> ~/.zshrc 
 git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
@@ -39,5 +39,5 @@ echo "#_____ [zsh_plugin] Completions" >> ~/.zshrc
 git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-completions
 echo "source ~/.oh-my-zsh/custom/plugins/zsh-completions/zsh-completions.plugin.zsh" >> ~/.zshrc
 source ~/.zshrc
-#_____ other apps
+#_____ other apps ( fzf requirement ubunut 20.04 or above )
 sudo apt install tree fzf -y
