@@ -44,4 +44,9 @@ source ~/.zshrc
 # sudo apt update && sudo apt dist-upgrade
 # sudo apt install update-manager-core
 # do-release-upgrade -d
-sudo apt install tree fzf -y
+sudo apt install kubectl tree fzf -y
+#_____ kubectl zsh auto-completion
+source <(kubectl completion zsh)
+echo 'compdef __start_kubectl k' >> ~/.zshrc
+autoload -Uz compinit
+compinit
