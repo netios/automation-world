@@ -5,7 +5,7 @@ sed -i "s/\=\"robbyrussell/\=\"jonathan/g" ~/.zshrc
 sed -i "\$aalias h=\"history -i\"" ~/.zshrc
 sed -i "\$aalias hs=\"history -i | grep\"" ~/.zshrc
 sed -i "\$aalias k=\"kubectl\"" ~/.zshrc
-cat <<EOF >> ~/.zshrc                                                                                                                                               ──(Fri,Dec03)─┘
+cat <<EOF >> ~/.zshrc
 #_____ history for zsh
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=10000000
