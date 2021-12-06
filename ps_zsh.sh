@@ -40,4 +40,8 @@ git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-~/.oh-my-zs
 echo "source ~/.oh-my-zsh/custom/plugins/zsh-completions/zsh-completions.plugin.zsh" >> ~/.zshrc
 source ~/.zshrc
 #_____ other apps ( fzf requirement ubunut 20.04 or above )
+############## ubuntu 18.x ---> ubuntu 20.x 
+# sudo apt update && sudo apt dist-upgrade
+# sudo apt install update-manager-core
+# do-release-upgrade -d
 sudo apt install tree fzf -y
