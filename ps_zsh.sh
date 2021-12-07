@@ -5,6 +5,7 @@ sed -i "s/\=\"robbyrussell/\=\"jonathan/g" ~/.zshrc
 sed -i "\$aalias h=\"history -i\"" ~/.zshrc
 sed -i "\$aalias hs=\"history -i | grep\"" ~/.zshrc
 sed -i "\$aalias k=\"kubectl\"" ~/.zshrc
+sed -i "\$aalias k9s=\"k9 --logoless\"" ~/.zshrc
 cat <<EOF >> ~/.zshrc
 #_____ history for zsh
 HISTFILE="$HOME/.zsh_history"
@@ -50,3 +51,5 @@ source <(kubectl completion zsh)
 echo 'compdef __start_kubectl k' >> ~/.zshrc
 autoload -Uz compinit
 compinit
+#_____ k9s
+sudo curl -sS https://webinstall.dev/k9s | bash
