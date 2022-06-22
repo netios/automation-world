@@ -53,4 +53,9 @@ public class mClicks
 }
 '@
 Add-Type -TypeDefinition $mHandle -ReferencedAssemblies System.Windows.Forms,System.Drawing
-[mClicks]::LeftClickAtPoint(100,100)
+
+$listmax = 2
+for ($i = 0; $i -lt $listmax; $i++) {
+    [mClicks]::LeftClickAtPoint(-1800,304+($i*19))
+    Start-Sleep -Seconds 1
+}
