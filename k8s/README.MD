@@ -2,6 +2,6 @@
 
 #kubecolor  
 
-```bash
+```sh
 curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/kubecolor_install.sh | bash
 ```
