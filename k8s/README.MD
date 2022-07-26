@@ -1,4 +1,4 @@
-## 2022.07 for k8s by sean.lee
+## webinstall for k8s by sean.lee (2022.07)  
 
 #kubecolor  
 
