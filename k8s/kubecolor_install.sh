@@ -18,4 +18,5 @@ if [ -f "$LINKFILE" ]; then
 fi
 ln -s ${DIRECTORY}${APPFILE} $LINKFILE
 chmod +x $LINKFILE
+export PATH=$PATH:$HOME/bin
 echo "==== kubecolor install done. ===="
