@@ -58,7 +58,8 @@ autoscalingGroupsnamePrefix: []
 awsAccessKeyID: ""
 
 # awsRegion -- AWS region (required if `cloudProvider=aws`)
-awsRegion: us-east-1
+awsRegion: ap-northeast-2
+#awsRegion: us-east-1
 
 # awsSecretAccessKey -- AWS access secret key ([if AWS user keys used](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/cloudprovider/aws/README.md#using-aws-credentials))
 awsSecretAccessKey: ""
@@ -166,6 +167,17 @@ extraArgs:
   logtostderr: true
   stderrthreshold: info
   v: 4
+  write-status-configmap: true
+  leader-elect: false
+  scan-interval: 10s
+  expander: least-waste
+  balance-similar-node-groups: true
+  max-node-provision-time: 15m0s
+  scale-down-enabled: true
+  scale-down-utilization-threshold: 0.5
+  scale-down-unneeded-time: 10m
+  skip-nodes-with-local-storage: false
+  skip-nodes-with-system-pods: false
   # write-status-configmap: true
   # status-config-map-name: cluster-autoscaler-status
   # leader-elect: true
