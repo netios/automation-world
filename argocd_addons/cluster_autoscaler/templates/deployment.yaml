@@ -14,6 +14,10 @@ spec:
     {{- if .Values.podLabels }}
 {{ toYaml .Values.podLabels | indent 6 }}
     {{- end }}
+{{- if .Values.updateStrategy }}
+  strategy:
+    {{ toYaml .Values.updateStrategy | nindent 4 | trim }}
+{{- end }}
   template:
     metadata:
     {{- if .Values.podAnnotations }}
@@ -22,6 +26,9 @@ spec:
     {{- end }}
       labels:
 {{ include "cluster-autoscaler.instance-name" . | indent 8 }}
+      {{- if .Values.additionalLabels }}
+{{ toYaml .Values.additionalLabels | indent 8 }}
+      {{- end }}
       {{- if .Values.podLabels }}
 {{ toYaml .Values.podLabels | indent 8 }}
       {{- end }}
@@ -34,13 +41,8 @@ spec:
       {{- end }}
       containers:
         - name: {{ template "cluster-autoscaler.name" . }}
-        {{- if eq .Values.cloudProvider "spotinst" }}
-          image: "{{ .Values.spotinst.image.repository }}:{{ .Values.spotinst.image.tag }}"
-          imagePullPolicy: "{{ .Values.spotinst.image.pullPolicy }}"
-        {{- else }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: "{{ .Values.image.pullPolicy }}"
-        {{- end }}
           command:
             - ./cluster-autoscaler
             - --cloud-provider={{ .Values.cloudProvider }}
@@ -60,14 +62,20 @@ spec:
             - --node-group-auto-discovery=mig:namePrefix={{ .name }},min={{ .minSize }},max={{ .maxSize }}
             {{- end }}
           {{- end }}
-          {{- end }}
-          {{- if eq .Values.cloudProvider "gce" }}
-            - --cloud-config={{ .Values.cloudConfigPath }}
+          {{- else if eq .Values.cloudProvider "magnum" }}
+            {{- if .Values.autoDiscovery.clusterName }}
+            - --cluster-name={{ .Values.autoDiscovery.clusterName }}
+            - --node-group-auto-discovery=magnum:role={{ tpl (join "," .Values.autoDiscovery.roles) . }}
+            {{- else }}
+            - --cluster-name={{ .Values.magnumClusterName }}
             {{- end }}
-          {{- range $key, $value := .Values.extraArgs }}
-            - --{{ $key }}={{ $value }}
           {{- end }}
-
+          {{- if eq .Values.cloudProvider "magnum" }}
+            - --cloud-config={{ .Values.cloudConfigPath }}
+          {{- end }}
+          {{- range $key, $value := .Values.extraArgs }}
+            - --{{ $key | mustRegexFind "^[^_]+" }}={{ $value }}
+          {{- end }}
           env:
           {{- if and (eq .Values.cloudProvider "aws") (ne .Values.awsRegion "") }}
             - name: AWS_REGION
@@ -86,11 +94,6 @@ spec:
                   key: AwsSecretAccessKey
                   name: {{ template "cluster-autoscaler.fullname" . }}
             {{- end }}
-          {{- else if eq .Values.cloudProvider "spotinst" }}
-            - name: SPOTINST_TOKEN
-              value: "{{ .Values.spotinst.token }}"
-            - name: SPOTINST_ACCOUNT
-              value: "{{ .Values.spotinst.account }}"
           {{- else if eq .Values.cloudProvider "azure" }}
             - name: ARM_SUBSCRIPTION_ID
               valueFrom:
@@ -142,7 +145,7 @@ spec:
             - name: {{ $key }}
               value: "{{ $value }}"
           {{- end }}
-          {{- range $key, $value := .Values.envFromConfigMap }}
+          {{- range $key, $value := .Values.extraEnvConfigMaps }}
             - name: {{ $key }}
               valueFrom:
                 configMapKeyRef:
@@ -156,10 +159,16 @@ spec:
                   name: {{ default (include "cluster-autoscaler.fullname" $) $value.name }}
                   key: {{ required "Must specify key!" $value.key }}
           {{- end }}
-          {{- if .Values.envFromSecret }}
+          {{- if or .Values.envFromSecret .Values.envFromConfigMap }}
           envFrom:
+          {{- if .Values.envFromSecret }}
             - secretRef:
                 name: {{ .Values.envFromSecret }}
+          {{- end }}
+          {{- if .Values.envFromConfigMap }}
+            - configMapRef:
+                name: {{ .Values.envFromConfigMap }}
+          {{- end }}
           {{- end }}
           livenessProbe:
             httpGet:
@@ -169,11 +178,30 @@ spec:
             - containerPort: 8085
           resources:
 {{ toYaml .Values.resources | indent 12 }}
-          {{- if eq .Values.cloudProvider "gce" }}
+          {{- if .Values.containerSecurityContext }}
+          securityContext:
+            {{ toYaml .Values.containerSecurityContext | nindent 12 | trim }}
+          {{- end }}
+          {{- if or (eq .Values.cloudProvider "magnum") .Values.extraVolumeSecrets .Values.extraVolumeMounts }}
           volumeMounts:
+          {{- if eq .Values.cloudProvider "magnum" }}
             - name: cloudconfig
               mountPath: {{ .Values.cloudConfigPath }}
               readOnly: true
+          {{- end }}
+          {{- if and (eq .Values.cloudProvider "magnum") (.Values.magnumCABundlePath) }}
+            - name: ca-bundle
+              mountPath: {{ .Values.magnumCABundlePath }}
+              readOnly: true
+          {{- end }}
+          {{- range $key, $value := .Values.extraVolumeSecrets }}
+            - name: {{ $key }}
+              mountPath: {{ required "Must specify mountPath!" $value.mountPath }}
+              readOnly: true
+          {{- end }}
+          {{- if .Values.extraVolumeMounts }}
+            {{ toYaml .Values.extraVolumeMounts | nindent 12 }}
+          {{- end }}
           {{- end }}
     {{- if .Values.affinity }}
       affinity:
@@ -183,16 +211,39 @@ spec:
       nodeSelector:
 {{ toYaml .Values.nodeSelector | indent 8 }}
     {{- end }}
-      serviceAccountName: {{ if .Values.rbac.create }}{{ template "cluster-autoscaler.fullname" . }}{{ else }}"{{ .Values.rbac.serviceAccountName }}"{{ end }}
+      serviceAccountName: {{ template "cluster-autoscaler.serviceAccountName" . }}
       tolerations:
 {{ toYaml .Values.tolerations | indent 8 }}
-      {{- if eq .Values.cloudProvider "gce" }}
+      {{- if .Values.securityContext }}
+      securityContext:
+        {{ toYaml .Values.securityContext | nindent 8 | trim }}
+      {{- end }}
+      {{- if or (eq .Values.cloudProvider "magnum") .Values.extraVolumeSecrets .Values.extraVolumes }}
       volumes:
+      {{- if eq .Values.cloudProvider "magnum" }}
         - name: cloudconfig
           hostPath:
             path: {{ .Values.cloudConfigPath }}
       {{- end }}
-    {{- if .Values.image.pullSecrets }}
+      {{- if and (eq .Values.cloudProvider "magnum") (.Values.magnumCABundlePath) }}
+        - name: ca-bundle
+          hostPath:
+            path: {{ .Values.magnumCABundlePath }}
+      {{- end }}
+      {{- range $key, $value := .Values.extraVolumeSecrets }}
+        - name: {{ $key }}
+          secret:
+            secretName: {{ default (include "cluster-autoscaler.fullname" $) $value.name }}
+            {{- if $value.items }}
+            items:
+            {{- toYaml $value.items | nindent 14 }}
+            {{- end }}
+      {{- end }}
+      {{- if .Values.extraVolumes }}
+        {{- toYaml .Values.extraVolumes | nindent 10 }}
+      {{- end }}
+      {{- end }}
+      {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
       {{- range .Values.image.pullSecrets }}
         - name: {{ . }}
