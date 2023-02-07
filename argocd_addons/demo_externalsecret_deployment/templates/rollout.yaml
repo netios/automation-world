@@ -25,8 +25,8 @@ spec:
     spec:
       nodeSelector:
         nodetype: dev
-      imagePullSecrets:
-      - name: regcred
+#      imagePullSecrets:
+#      - name: regcred
       containers:
       - name: demo-finance-api
         image: k8s.gcr.io/busybox
