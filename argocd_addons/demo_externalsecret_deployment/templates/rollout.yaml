@@ -1,0 +1,69 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: demo-finance-api
+  namespace: demo
+  labels:
+    app: demo-finance-api
+    project: demo-finance
+    release: {{ .Release.Name }}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      project: demo-finance
+      app: demo-finance-api
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      namespace: demo
+      labels:
+        project: demo-finance
+        app: demo-finance-api
+        release: {{ .Release.Name }}
+    spec:
+      nodeSelector:
+        nodetype: dev
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: demo-finance-api
+        image: k8s.gcr.io/busybox
+        command: [ "/bin/sh", "-c", "env" ]
+        resources:
+          requests:
+            memory: "0.7Gi"
+            cpu: "1000m"
+          limits:
+            memory: "0.7Gi"
+            cpu: "1000m"
+        env:
+          - name: DEMO_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: demo-finance-api-aws-secrets-manager
+                key: testkey
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+          name: http
+        livenessProbe:
+          initialDelaySeconds: 20
+          failureThreshold: 5
+          periodSeconds: 10
+          httpGet:
+            path: /health-check
+            port: http
+        readinessProbe:
+          initialDelaySeconds: 10
+          failureThreshold: 3
+          httpGet:
+            path: /health-check
+            port: http
+  strategy:
+    blueGreen:
+      activeService: demo-finance-api
+      previewService: demo-finance-api-preview
+      autoPromotionEnabled: true
+      scaleDownDelaySeconds: 10
