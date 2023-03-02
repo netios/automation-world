@@ -7,7 +7,11 @@ metadata:
 {{- end }}
   labels:
 {{ include "cluster-autoscaler.labels" . | indent 4 }}
+{{- if .Values.service.labels }}
+{{ toYaml .Values.service.labels | indent 4 }}
+{{- end }}
   name: {{ template "cluster-autoscaler.fullname" . }}
+  namespace: {{ .Release.Namespace }}
 spec:
 {{- if .Values.service.clusterIP }}
   clusterIP: "{{ .Values.service.clusterIP }}"
