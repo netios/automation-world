@@ -5,7 +5,6 @@ metadata:
   labels:
 {{ include "cluster-autoscaler.labels" . | indent 4 }}
   name: {{ template "cluster-autoscaler.fullname" . }}
-  namespace: {{ .Release.Namespace }}
 rules:
   - apiGroups:
       - ""
@@ -13,7 +12,7 @@ rules:
       - configmaps
     verbs:
       - create
-{{- if (include "cluster-autoscaler.priorityExpanderEnabled" .) }}
+{{- if eq (default "" .Values.extraArgs.expander) "priority" }}
       - list
       - watch
 {{- end }}
@@ -23,56 +22,14 @@ rules:
       - configmaps
     resourceNames:
       - cluster-autoscaler-status
-{{- if (include "cluster-autoscaler.priorityExpanderEnabled" .) }}
+{{- if eq (default "" .Values.extraArgs.expander) "priority" }}
       - cluster-autoscaler-priority-expander
 {{- end }}
     verbs:
       - delete
       - get
       - update
-{{- if (include "cluster-autoscaler.priorityExpanderEnabled" .) }}
+{{- if eq (default "" .Values.extraArgs.expander) "priority" }}
       - watch
-{{- end }}
-{{- if  eq (default "" (index .Values.extraArgs "leader-elect-resource-lock")) "configmaps" }}
-  - apiGroups:
-      - ""
-    resources:
-      - configmaps
-    resourceNames:
-      - cluster-autoscaler
-    verbs:
-      - get
-      - update
-{{- end }}
-{{- if and ( and ( eq .Values.cloudProvider "clusterapi" ) ( not .Values.rbac.clusterScoped ) ( or ( eq .Values.clusterAPIMode "incluster-incluster" ) ( eq .Values.clusterAPIMode "kubeconfig-incluster" ) ))}}
-  - apiGroups:
-    - cluster.x-k8s.io
-    resources:
-    - machinedeployments
-    - machinedeployments/scale
-    - machines
-    - machinesets
-    verbs:
-    - get
-    - list
-    - update
-    - watch
-{{- end }}
-{{- if ( not .Values.rbac.clusterScoped ) }}
-  - apiGroups:
-    - coordination.k8s.io
-    resources:
-    - leases
-    verbs:
-    - create
-  - apiGroups:
-    - coordination.k8s.io
-    resourceNames:
-    - cluster-autoscaler
-    resources:
-    - leases
-    verbs:
-    - get
-    - update
 {{- end }}
 {{- end -}}
