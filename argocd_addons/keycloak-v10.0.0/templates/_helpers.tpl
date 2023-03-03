@@ -65,7 +65,7 @@ Create a default fully qualified app name for the postgres requirement.
 */}}
 {{- define "keycloak.postgresql.fullname" -}}
 {{- $postgresContext := dict "Values" .Values.postgresql "Release" .Release "Chart" (dict "Name" "postgresql") -}}
-{{ include "postgresql.fullname" $postgresContext }}
+{{ include "keycloak.fullname" .}}-{{ include "postgresql.name" $postgresContext }}
 {{- end }}
 
 {{/*
@@ -74,14 +74,3 @@ Create the service DNS name.
 {{- define "keycloak.serviceDnsName" -}}
 {{ include "keycloak.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 {{- end }}
-
-{{/*
-Return the appropriate apiVersion for ingress.
-*/}}
-{{- define "keycloak.ingressAPIVersion" -}}
-{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
-{{- print "networking.k8s.io/v1" -}}
-{{- else -}}
-{{- print "networking.k8s.io/v1beta1" -}}
-{{- end -}}
-{{- end -}}
