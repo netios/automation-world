@@ -20,7 +20,7 @@
           "type": "string"
         },
         "tag": {
-          "type": "string"
+          "type": ["string", "integer"]
         }
       }
     },
@@ -108,7 +108,15 @@
               "paths": {
                 "type": "array",
                 "items": {
-                  "type": "string"
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "pathType": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }
@@ -206,6 +214,9 @@
       "podManagementPolicy": {
         "type": "string"
       },
+      "updateStrategy": {
+        "type": "string"
+      },
       "podSecurityContext": {
         "type": "object"
       },
@@ -219,6 +230,9 @@
         "type": "object"
       },
       "serviceMonitor": {
+        "type": "object"
+      },
+      "extraServiceMonitor": {
         "type": "object"
       },
       "readinessProbe": {
@@ -269,6 +283,9 @@
             "type": "object"
           },
           "extraPorts": {
+            "type": "array"
+          },
+          "loadBalancerSourceRanges": {
             "type": "array"
           },
           "httpNodePort": {
@@ -328,6 +345,12 @@
           },
           "loadBalancerIP": {
             "type": "string"
+          },
+          "sessionAffinity": {
+            "type": "string"
+          },
+          "sessionAffinityConfig": {
+            "type": "object"
           }
         }
       },
@@ -373,6 +396,29 @@
       },
       "terminationGracePeriodSeconds": {
         "type": "integer"
+      },
+      "autoscaling": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "labels": {
+            "type": "object"
+          },
+          "minReplicas": {
+            "type": "integer"
+          },
+          "maxReplicas": {
+            "type": "integer"
+          },
+          "metrics": {
+            "type": "array"
+          },
+          "behavior": {
+            "type": "object"
+          }
+        }
       },
       "test": {
         "type": "object",

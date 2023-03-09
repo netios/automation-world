@@ -17,11 +17,13 @@ spec:
   selector:
     matchLabels:
       {{- include "keycloak.selectorLabels" . | nindent 6 }}
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicas }}
+  {{- end }}
   serviceName: {{ include "keycloak.fullname" . }}-headless
   podManagementPolicy: {{ .Values.podManagementPolicy }}
   updateStrategy:
-    type: RollingUpdate
+    type: {{ .Values.updateStrategy }}
   template:
     metadata:
       annotations:
@@ -39,6 +41,7 @@ spec:
         {{- printf "%s: %s" $key (tpl $value $ | quote) | nindent 8 }}
         {{- end }}
     spec:
+    {{- if not .Values.skipInitContainers }}
       {{- if or .Values.postgresql.enabled .Values.extraInitContainers }}
       initContainers:
         {{- if .Values.postgresql.enabled }}
@@ -65,6 +68,7 @@ spec:
         {{- tpl . $ | nindent 8 }}
         {{- end }}
       {{- end }}
+    {{- end }}
       containers:
         - name: keycloak
           securityContext:
@@ -125,12 +129,17 @@ spec:
           readinessProbe:
             {{- tpl . $ | nindent 12 }}
           {{- end }}
+          {{- with .Values.startupProbe }}
+          startupProbe:
+            {{- tpl . $ | nindent 12 }}
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
-            {{- if .Values.startupScripts }}
+            {{- range $key, $value := .Values.startupScripts }}
             - name: startup
-              mountPath: /opt/jboss/startup-scripts
+              mountPath: "/opt/jboss/startup-scripts/{{ $key }}"
+              subPath: "{{ $key }}"
               readOnly: true
             {{- end }}
             {{- with .Values.extraVolumeMounts }}
@@ -160,6 +169,10 @@ spec:
       affinity:
         {{- tpl . $ | nindent 8 }}
       {{- end }}
+      {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- tpl . $ | nindent 8 }}
+      {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
@@ -169,11 +182,16 @@ spec:
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       volumes:
-        {{- if .Values.startupScripts }}
+        {{- with .Values.startupScripts }}
         - name: startup
           configMap:
-            name: {{ include "keycloak.fullname" . }}-startup
+            name: {{ include "keycloak.fullname" $ }}-startup
             defaultMode: 0555
+            items:
+              {{- range $key, $value := . }}
+              - key: {{ $key }}
+                path: {{ $key }}
+              {{- end }}
         {{- end }}
         {{- with .Values.extraVolumes }}
         {{- tpl . $ | nindent 8 }}
