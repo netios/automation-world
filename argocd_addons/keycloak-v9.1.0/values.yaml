@@ -246,7 +246,7 @@ ingress:
   servicePort: https
   # Ingress annotations
   annotations: 
-    kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.class: nginx-new
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
   # Additional Ingress labels
   labels: {}
