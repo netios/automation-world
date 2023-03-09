@@ -37,7 +37,9 @@ Common labels
 {{- define "keycloak.labels" -}}
 helm.sh/chart: {{ include "keycloak.chart" . }}
 {{ include "keycloak.selectorLabels" . }}
-app.kubernetes.io/version: {{ .Values.image.tag | default .Chart.AppVersion | quote }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
@@ -65,7 +67,7 @@ Create a default fully qualified app name for the postgres requirement.
 */}}
 {{- define "keycloak.postgresql.fullname" -}}
 {{- $postgresContext := dict "Values" .Values.postgresql "Release" .Release "Chart" (dict "Name" "postgresql") -}}
-{{ include "keycloak.fullname" .}}-{{ include "postgresql.name" $postgresContext }}
+{{ include "postgresql.fullname" $postgresContext }}
 {{- end }}
 
 {{/*
@@ -73,4 +75,15 @@ Create the service DNS name.
 */}}
 {{- define "keycloak.serviceDnsName" -}}
 {{ include "keycloak.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+{{- end }}
+
+{{/*
+Create the namespace for the ServiceMonitor deployment
+*/}}
+{{- define "keycloak.serviceMonitorNamespace" -}}
+{{- if .Values.prometheus.operator.serviceMonitor.namespace }}
+{{ .Values.prometheus.operator.serviceMonitor.namespace }}
+{{- else }}
+{{ .Release.Namespace }}
+{{- end }}
 {{- end }}

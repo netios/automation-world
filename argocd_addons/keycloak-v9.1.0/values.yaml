@@ -4,13 +4,13 @@ fullnameOverride: ""
 # Optionally override the name
 nameOverride: ""
 
-# The number of replicas to create (has no effect if autoscaling enabled)
+# The number of replicas to create
 replicas: 1
 
 image:
   # The Keycloak image repository
-  repository: quay.io/keycloak/keycloak
-  # Overrides the Keycloak image tag whose default is the chart appVersion
+  repository: docker.io/jboss/keycloak
+  # Overrides the Keycloak image tag whose default is the chart version
   tag: ""
   # The Keycloak image pull policy
   pullPolicy: IfNotPresent
@@ -30,9 +30,6 @@ enableServiceLinks: true
 
 # Pod management policy. One of `Parallel` or `OrderedReady`
 podManagementPolicy: Parallel
-
-# StatefulSet's update strategy
-updateStrategy: RollingUpdate
 
 # Pod restart policy. One of `Always`, `OnFailure`, or `Never`
 restartPolicy: Always
@@ -73,12 +70,6 @@ securityContext:
 
 # Additional init containers, e. g. for providing custom themes
 extraInitContainers: ""
-
-# When using service meshes which rely on a sidecar, it may be necessary to skip init containers altogether,
-# since the sidecar doesn't start until the init containers are done, and the sidecar may be required
-# for network access.
-# For example, Istio in strict mTLS mode prevents the pgchecker init container from ever completing
-skipInitContainers: false
 
 # Additional sidecar containers, e. g. for a database proxy, such as Google's cloudsql-proxy
 extraContainers: ""
@@ -147,9 +138,6 @@ affinity: |
                   - test
           topologyKey: failure-domain.beta.kubernetes.io/zone
 
-# Topology spread constraints template
-topologySpreadConstraints:
-
 # Node labels for Pod assignment
 nodeSelector: {}
 #  nodetype: system
@@ -168,7 +156,7 @@ livenessProbe: |
   httpGet:
     path: /auth/
     port: http
-  initialDelaySeconds: 0
+  initialDelaySeconds: 300
   timeoutSeconds: 5
 
 # Readiness probe configuration
@@ -178,16 +166,6 @@ readinessProbe: |
     port: http
   initialDelaySeconds: 30
   timeoutSeconds: 1
-
-# Startup probe configuration
-startupProbe: |
-  httpGet:
-    path: /auth/
-    port: http
-  initialDelaySeconds: 30
-  timeoutSeconds: 1
-  failureThreshold: 60
-  periodSeconds: 5
 
 # Pod resource requests and limits
 resources: {}
@@ -231,7 +209,6 @@ statefulsetLabels: {}
 # Configuration for secrets that should be created
 secrets: {}
   # mysecret:
-  #   type: {}
   #   annotations: {}
   #   labels: {}
   #   stringData: {}
@@ -261,35 +238,16 @@ service:
   httpManagementNodePort: null
   # Additional Service ports, e. g. for custom admin console
   extraPorts: []
-  # When using Service type LoadBalancer, you can restrict source ranges allowed
-  # to connect to the LoadBalancer, e. g. will result in Security Groups
-  # (or equivalent) with inbound source ranges allowed to connect
-  loadBalancerSourceRanges: []
-  # When using Service type LoadBalancer, you can preserve the source IP seen in the container
-  # by changing the default (Cluster) to be Local.
-  # See https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-  externalTrafficPolicy: "Cluster"
-  # Session affinity
-  # See https://kubernetes.io/docs/concepts/services-networking/service/#proxy-mode-userspace
-  sessionAffinity: ""
-  # Session affinity config
-  sessionAffinityConfig: {}
 
 ingress:
   # If `true`, an Ingress is created
   enabled: true
-  # The name of the Ingress Class associated with this ingress
-  ingressClassName: ""
   # The Service port targeted by the Ingress
   servicePort: https
   # Ingress annotations
-  annotations:   
+  annotations: 
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-    ## Resolve HTTP 502 error using ingress-nginx:
-    ## See https://www.ibm.com/support/pages/502-error-ingress-keycloak-response
-    # nginx.ingress.kubernetes.io/proxy-buffer-size: 128k
-
   # Additional Ingress labels
   labels: {}
    # List of rules for the Ingress
@@ -300,37 +258,13 @@ ingress:
       host: 'keycloak2.lovissoft.com'
       # Paths for the host
       paths:
-        - path: /
-          pathType: Prefix
+        - /
   # TLS configuration
   tls:
     - hosts:
         - keycloak2.lovissoft.com
       secretName: 20220121-lovissoft
-
-  # ingress for console only (/auth/admin)
-  console:
-    # If `true`, an Ingress is created for console path only
-    enabled: false
-    # The name of Ingress Class associated with the console ingress only
-    ingressClassName: ""
-    # Ingress annotations for console ingress only
-    # Useful to set nginx.ingress.kubernetes.io/whitelist-source-range particularly
-    annotations: {}
-    rules:
-      -
-        # Ingress host
-        host: '{{ .Release.Name }}.keycloak.example.com'
-        # Paths for the host
-        paths:
-          - path: /auth/admin/
-            pathType: Prefix
-    # Console TLS configuration
-    tls: []
-#      - hosts:
-#          - console.keycloak.example.com
-#        secretName: ""
-
+      
 ## Network policy configuration
 networkPolicy:
   # If true, the Network policies are deployed
@@ -380,11 +314,11 @@ pgchecker:
   # Resource requests and limits for the pgchecker container
   resources:
     requests:
-      cpu: "20m"
-      memory: "32Mi"
+      cpu: "10m"
+      memory: "16Mi"
     limits:
-      cpu: "20m"
-      memory: "32Mi"
+      cpu: "10m"
+      memory: "16Mi"
 
 postgresql:
   # If `true`, the Postgresql dependency is enabled
@@ -395,6 +329,8 @@ postgresql:
   postgresqlPassword: keycloak
   # PostgreSQL Database to create
   postgresqlDatabase: keycloak
+  # Persistent Volume Storage configuration
+
   # PostgreSQL network policy configuration
   networkPolicy:
     enabled: false
@@ -404,8 +340,6 @@ serviceMonitor:
   enabled: false
   # Optionally sets a target namespace in which to deploy the ServiceMonitor resource
   namespace: ""
-  # Optionally sets a namespace for the ServiceMonitor
-  namespaceSelector: {}
   # Annotations for the ServiceMonitor
   annotations: {}
   # Additional labels for the ServiceMonitor
@@ -418,26 +352,6 @@ serviceMonitor:
   path: /metrics
   # The Service port at which metrics are served
   port: http-management
-
-extraServiceMonitor:
-  # If `true`, a ServiceMonitor resource for the prometheus-operator is created
-  enabled: false
-  # Optionally sets a target namespace in which to deploy the ServiceMonitor resource
-  namespace: ""
-  # Optionally sets a namespace for the ServiceMonitor
-  namespaceSelector: {}
-  # Annotations for the ServiceMonitor
-  annotations: {}
-  # Additional labels for the ServiceMonitor
-  labels: {}
-  # Interval at which Prometheus scrapes metrics
-  interval: 10s
-  # Timeout for scraping
-  scrapeTimeout: 10s
-  # The path at which metrics are served
-  path: /auth/realms/master/metrics
-  # The Service port at which metrics are served
-  port: http
 
 prometheusRule:
   # If `true`, a PrometheusRule resource for the prometheus-operator is created
@@ -469,34 +383,6 @@ prometheusRule:
   #   labels:
   #     severity: warning
 
-autoscaling:
-  # If `true`, a autoscaling/v2beta2 HorizontalPodAutoscaler resource is created (requires Kubernetes 1.18 or above)
-  # Autoscaling seems to be most reliable when using KUBE_PING service discovery (see README for details)
-  # This disables the `replicas` field in the StatefulSet
-  enabled: false
-  # Additional HorizontalPodAutoscaler labels
-  labels: {}
-  # The minimum and maximum number of replicas for the Keycloak StatefulSet
-  minReplicas: 3
-  maxReplicas: 10
-  # The metrics to use for scaling
-  metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        target:
-          type: Utilization
-          averageUtilization: 80
-  # The scaling policy to use. This will scale up quickly but only scale down a single Pod per 5 minutes.
-  # This is important because caches are usually only replicated to 2 Pods and if one of those Pods is terminated this will give the cluster time to recover.
-  behavior:
-    scaleDown:
-      stabilizationWindowSeconds: 300
-      policies:
-        - type: Pods
-          value: 1
-          periodSeconds: 300
-
 test:
   # If `true`, test resources are created
   enabled: false
@@ -514,5 +400,3 @@ test:
   securityContext:
     runAsUser: 1000
     runAsNonRoot: true
-  # See https://helm.sh/docs/topics/charts_hooks/#hook-deletion-policies
-  deletionPolicy: before-hook-creation
