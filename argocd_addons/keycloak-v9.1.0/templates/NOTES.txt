@@ -6,10 +6,14 @@
 
 {{- if .Values.ingress.enabled }}
 
-Keycloak was installed with an Ingress and an be reached at the following URL(s):
+Keycloak was installed with an Ingress and can be reached at the following URL(s):
 {{ range $unused, $rule := .Values.ingress.rules }}
   {{- range $rule.paths }}
-  - http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $rule.host }}{{ . }}
+  {{- if $rule.host }}
+  - http{{ if $.Values.ingress.tls }}s{{ end }}://{{ tpl $rule.host $ }}{{ .path }}
+  {{- else }}
+  - http{{ if $.Values.ingress.tls }}s{{ end }}://<INGRESS_ADDRESS>{{ .path }}
+  {{-  end }}
   {{-  end }}
 {{- end }}
 

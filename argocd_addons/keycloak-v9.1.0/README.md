@@ -19,6 +19,9 @@ For more information on Keycloak and its capabilities, see its [documentation](h
 The chart has an optional dependency on the [PostgreSQL](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) chart.
 By default, the PostgreSQL chart requires PV support on underlying infrastructure (may be disabled).
 
+**Important**
+Since Version `v16.0.0` the support for Helm v2 is dropped in favor of to support also the latest postgres Helm Chart Version which requires Helm v3 only.
+
 ## Installing the Chart
 
 To install the chart with the release name `keycloak`:
@@ -39,125 +42,163 @@ $ helm uninstall keycloak
 
 The following table lists the configurable parameters of the Keycloak chart and their default values.
 
-| Parameter | Description | Default |
-|---|---|---|
-| `fullnameOverride` | Optionally override the fully qualified name | `""` |
-| `nameOverride` | Optionally override the name | `""` |
-| `replicas` | The number of replicas to create | `1` |
-| `image.repository` | The Keycloak image repository | `docker.io/jboss/keycloak` |
-| `image.tag` | Overrides the Keycloak image tag whose default is the chart version | `""` |
-| `image.pullPolicy` | The Keycloak image pull policy | `IfNotPresent` |
-| `imagePullSecrets` | Image pull secrets for the Pod | `` |
-| `hostAliases` | Mapping between IPs and hostnames that will be injected as entries in the Pod's hosts files | `[]` |
-| `enableServiceLinks` | Indicates whether information about services should be injected into Pod's environment variables, matching the syntax of Docker links | `true` |
-| `podManagementPolicy` | Pod management policy. One of `Parallel` or `OrderedReady` | `Parallel` |
-| `restartPolicy` | Pod restart policy. One of `Always`, `OnFailure`, or `Never` | `Always` |
-| `serviceAccount.create` | Specifies whether a ServiceAccount should be created | `true` |
-| `serviceAccount.name` | The name of the service account to use. If not set and create is true, a name is generated using the fullname template | `""` |
-| `serviceAccount.annotations` | Additional annotations for the ServiceAccount | `{}` |
-| `serviceAccount.labels` | Additional labels for the ServiceAccount | `{}` |
-| `serviceAccount.imagePullSecrets` | Image pull secrets that are attached to the ServiceAccount | `[]` |
-| `rbac.create` | Specifies whether RBAC resources are to be created | `false`
-| `rbac.rules` | Custom RBAC rules, e. g. for KUBE_PING | `[]`
+| Parameter | Description                                                                                                                                                                                                                                                                       | Default |
+|---|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---|
+| `fullnameOverride` | Optionally override the fully qualified name                                                                                                                                                                                                                                      | `""` |
+| `nameOverride` | Optionally override the name                                                                                                                                                                                                                                                      | `""` |
+| `replicas` | The number of replicas to create                                                                                                                                                                                                                                                  | `1` |
+| `image.repository` | The Keycloak image repository                                                                                                                                                                                                                                                     | `quay.io/keycloak/keycloak` |
+| `image.tag` | Overrides the Keycloak image tag whose default is the chart version. Note versions after 16.1.1 need to use the `-legacy` suffix, e.g. `17.0.1-legacy`                                                                                                                              | `""` |
+| `image.pullPolicy` | The Keycloak image pull policy                                                                                                                                                                                                                                                    | `IfNotPresent` |
+| `imagePullSecrets` | Image pull secrets for the Pod                                                                                                                                                                                                                                                    | `[]` |
+| `hostAliases` | Mapping between IPs and hostnames that will be injected as entries in the Pod's hosts files                                                                                                                                                                                       | `[]` |
+| `enableServiceLinks` | Indicates whether information about services should be injected into Pod's environment variables, matching the syntax of Docker links                                                                                                                                             | `true` |
+| `podManagementPolicy` | Pod management policy. One of `Parallel` or `OrderedReady`                                                                                                                                                                                                                        | `Parallel` |
+| `updateStrategy` | StatefulSet update strategy. One of `RollingUpdate` or `OnDelete`                                                                                                                                                                                                                        | `RollingUpdate` |
+| `restartPolicy` | Pod restart policy. One of `Always`, `OnFailure`, or `Never`                                                                                                                                                                                                                      | `Always` |
+| `serviceAccount.create` | Specifies whether a ServiceAccount should be created                                                                                                                                                                                                                              | `true` |
+| `serviceAccount.name` | The name of the service account to use. If not set and create is true, a name is generated using the fullname template                                                                                                                                                            | `""` |
+| `serviceAccount.annotations` | Additional annotations for the ServiceAccount                                                                                                                                                                                                                                     | `{}` |
+| `serviceAccount.labels` | Additional labels for the ServiceAccount                                                                                                                                                                                                                                          | `{}` |
+| `serviceAccount.imagePullSecrets` | Image pull secrets that are attached to the ServiceAccount                                                                                                                                                                                                                        | `[]` |
+| `rbac.create` | Specifies whether RBAC resources are to be created                                                                                                                                                                                                                                | `false`
+| `rbac.rules` | Custom RBAC rules, e. g. for KUBE_PING                                                                                                                                                                                                                                            | `[]`
 | `podSecurityContext` | SecurityContext for the entire Pod. Every container running in the Pod will inherit this SecurityContext. This might be relevant when other components of the environment inject additional containers into running Pods (service meshes are the most prominent example for this) | `{"fsGroup":1000}` |
-| `securityContext` | SecurityContext for the Keycloak container | `{"runAsNonRoot":true,"runAsUser":1000}` |
-| `extraInitContainers` | Additional init containers, e. g. for providing custom themes | `[]` |
-| `extraContainers` | Additional sidecar containers, e. g. for a database proxy, such as Google's cloudsql-proxy | `[]` |
-| `lifecycleHooks` | Lifecycle hooks for the Keycloak container | `{}` |
-| `terminationGracePeriodSeconds` | Termination grace period in seconds for Keycloak shutdown. Clusters with a large cache might need to extend this to give Infinispan more time to rebalance | `60` |
-| `clusterDomain` | The internal Kubernetes cluster domain | `cluster.local` |
-| `command` | # Overrides the default entrypoint of the Keycloak container | `[]` |
-| `args` | # Overrides the default args for the Keycloak container | `[]` |
-| `extraEnv` | Additional environment variables for Keycloak | `""` |
-| `extraEnvFrom` | Additional environment variables for Keycloak mapped from a Secret or ConfigMap | `""` |
-| `priorityClassName` | Pod priority class name | `""` |
-| `affinity` | Pod affinity | Hard node and soft zone anti-affinity |
-| `nodeSelector` | Node labels for Pod assignment | `{}` |
-| `tolerations` | Node taints to tolerate | `[]` |
-| `podLabels` | Additional Pod labels | `{}` |
-| `podAnnotations` | Additional Pod annotations | `{}` |
-| `livenessProbe` | Liveness probe configuration | `{"httpGet":{"path":"/health/live","port":"http"},"initialDelaySeconds":300,"timeoutSeconds":5}` |
-| `readinessProbe` | Readiness probe configuration | `{"httpGet":{"path":"/auth/realms/master","port":"http"},"initialDelaySeconds":30,"timeoutSeconds":1}` |
-| `resources` | Pod resource requests and limits | `{}` |
-| `startupScripts` | Startup scripts to run before Keycloak starts up | `{"keycloak.cli":"{{- .Files.Get \"scripts/keycloak.cli\" | nindent 2 }}\n"}` |
-| `extraVolumes` | Add additional volumes, e. g. for custom themes | `""` |
-| `extraVolumeMounts` | Add additional volumes mounts, e. g. for custom themes | `""` |
-| `extraPorts` | Add additional ports, e. g. for admin console or exposing JGroups ports | `[]` |
-| `podDisruptionBudget` | Pod disruption budget | `{}` |
-| `statefulsetAnnotations` | Annotations for the StatefulSet | `{}` |
-| `statefulsetLabels` | Additional labels for the StatefulSet | `{}` |
-| `secrets` | Configuration for secrets that should be created | `{}` |
-| `service.annotations` | Annotations for headless and HTTP Services | `{}` |
-| `service.labels` | Additional labels for headless and HTTP Services | `{}` |
-| `service.type` | The Service type | `ClusterIP` |
-| `service.loadBalancerIP` | Optional IP for the load balancer. Used for services of type LoadBalancer only | `""` |
-| `service.httpPort` | The http Service port | `80` |
-| `service.httpNodePort` | The HTTP Service node port if type is NodePort | `""` |
-| `service.httpsPort` | The HTTPS Service port | `8443` |
-| `service.httpsNodePort` | The HTTPS Service node port if type is NodePort | `""` |
-| `service.httpManagementPort` | The WildFly management Service port | `8443` |
-| `service.httpManagementNodePort` | The WildFly management node port if type is NodePort | `""` |
-| `service.extraPorts` | Additional Service ports, e. g. for custom admin console | `[]` |
-| `ingress.enabled` | If `true`, an Ingress is created | `false` |
-| `ingress.rules` | List of Ingress Ingress rule | see below |
-| `ingress.rules[0].host` | Host for the Ingress rule | `keycloak.example.com` |
-| `ingress.rules[0].paths` | Paths for the Ingress rule | `[/]` |
-| `ingress.servicePort` | The Service port targeted by the Ingress | `http` |
-| `ingress.annotations` | Ingress annotations | `{}` |
-| `ingress.labels` | Additional Ingress labels | `{}` |
-| `ingress.tls` | TLS configuration | see below |
-| `ingress.tls[0].hosts` | List of TLS hosts | `[keycloak.example.com]` |
-| `ingress.tls[0].secretName` | Name of the TLS secret | `""` |
-| `networkPolicy.enabled` | If true, the ingress network policy is deployed | `false`
-| `networkPolicy.extraFrom` | Allows to define allowed external traffic (see Kubernetes doc for network policy `from` format) | `[]`
-| `route.enabled` | If `true`, an OpenShift Route is created | `false` |
-| `route.path` | Path for the Route | `/` |
-| `route.annotations` | Route annotations | `{}` |
-| `route.labels` | Additional Route labels | `{}` |
-| `route.host` | Host name for the Route | `""` |
-| `route.tls.enabled` | If `true`, TLS is enabled for the Route | `true` |
-| `route.tls.insecureEdgeTerminationPolicy` | Insecure edge termination policy of the Route. Can be `None`, `Redirect`, or `Allow` | `Redirect` |
-| `route.tls.termination` | TLS termination of the route. Can be `edge`, `passthrough`, or `reencrypt` | `edge` |
-| `pgchecker.image.repository` | Docker image used to check Postgresql readiness at startup | `docker.io/busybox` |
-| `pgchecker.image.tag` | Image tag for the pgchecker image | `1.32` |
-| `pgchecker.image.pullPolicy` | Image pull policy for the pgchecker image | `IfNotPresent` |
-| `pgchecker.securityContext` | SecurityContext for the pgchecker container | `{"allowPrivilegeEscalation":false,"runAsGroup":1000,"runAsNonRoot":true,"runAsUser":1000}` |
-| `pgchecker.resources` | Resource requests and limits for the pgchecker container | `{"limits":{"cpu":"10m","memory":"16Mi"},"requests":{"cpu":"10m","memory":"16Mi"}}` |
-| `postgresql.enabled` | If `true`, the Postgresql dependency is enabled | `true` |
-| `postgresql.postgresqlUsername` | PostgreSQL User to create | `keycloak` |
-| `postgresql.postgresqlPassword` | PostgreSQL Password for the new user | `keycloak` |
-| `postgresql.postgresqlDatabase` | PostgreSQL Database to create | `keycloak` |
-| `serviceMonitor.enabled` | If `true`, a ServiceMonitor resource for the prometheus-operator is created | `false` |
-| `serviceMonitor.namespace` | Optionally sets a target namespace in which to deploy the ServiceMonitor resource | `""` |
-| `serviceMonitor.annotations` | Annotations for the ServiceMonitor | `{}` |
-| `serviceMonitor.labels` | Additional labels for the ServiceMonitor | `{}` |
-| `serviceMonitor.interval` | Interval at which Prometheus scrapes metrics | `10s` |
-| `serviceMonitor.scrapeTimeout` | Timeout for scraping | `10s` |
-| `serviceMonitor.path` | The path at which metrics are served | `/metrics` |
-| `serviceMonitor.port` | The Service port at which metrics are served | `http` |
-| `prometheusRule.enabled` | If `true`, a PrometheusRule resource for the prometheus-operator is created | `false` |
-| `prometheusRule.annotations` | Annotations for the PrometheusRule | `{}` |
-| `prometheusRule.labels` | Additional labels for the PrometheusRule | `{}` |
-| `prometheusRule.rules` | List of rules for Prometheus | `` |
-| `test.enabled` | If `true`, test resources are created | `false` |
-| `test.image.repository` | The image for the test Pod | `docker.io/unguiculus/docker-python3-phantomjs-selenium` |
-| `test.image.tag` | The tag for the test Pod image | `v1` |
-| `test.image.pullPolicy` | The image pull policy for the test Pod image | `IfNotPresent` |
-| `test.podSecurityContext` | SecurityContext for the entire test Pod | `{"fsGroup":1000}` |
-| `test.securityContext` | SecurityContext for the test container | `{"runAsNonRoot":true,"runAsUser":1000}` |
-
+| `securityContext` | SecurityContext for the Keycloak container                                                                                                                                                                                                                                        | `{"runAsNonRoot":true,"runAsUser":1000}` |
+| `extraInitContainers` | Additional init containers, e. g. for providing custom themes                                                                                                                                                                                                                     | `[]` |
+| `skipInitContainers` | Skip all init containers (to avoid issues with service meshes which require sidecar proxies for connectivity)                                                                                                                                                                     | `false`
+| `extraContainers` | Additional sidecar containers, e. g. for a database proxy, such as Google's cloudsql-proxy                                                                                                                                                                                        | `[]` |
+| `lifecycleHooks` | Lifecycle hooks for the Keycloak container                                                                                                                                                                                                                                        | `{}` |
+| `terminationGracePeriodSeconds` | Termination grace period in seconds for Keycloak shutdown. Clusters with a large cache might need to extend this to give Infinispan more time to rebalance                                                                                                                        | `60` |
+| `clusterDomain` | The internal Kubernetes cluster domain                                                                                                                                                                                                                                            | `cluster.local` |
+| `command` | Overrides the default entrypoint of the Keycloak container                                                                                                                                                                                                                        | `[]` |
+| `args` | Overrides the default args for the Keycloak container                                                                                                                                                                                                                             | `[]` |
+| `extraEnv` | Additional environment variables for Keycloak                                                                                                                                                                                                                                     | `""` |
+| `extraEnvFrom` | Additional environment variables for Keycloak mapped from a Secret or ConfigMap                                                                                                                                                                                                   | `""` |
+| `priorityClassName` | Pod priority class name                                                                                                                                                                                                                                                           | `""` |
+| `affinity` | Pod affinity                                                                                                                                                                                                                                                                      | Hard node and soft zone anti-affinity |
+| `topologySpreadConstraints` | Topology spread constraints                                                                                                                                                                                                                                                       | Constraints used to spread pods |
+| `nodeSelector` | Node labels for Pod assignment                                                                                                                                                                                                                                                    | `{}` |
+| `tolerations` | Node taints to tolerate                                                                                                                                                                                                                                                           | `[]` |
+| `podLabels` | Additional Pod labels                                                                                                                                                                                                                                                             | `{}` |
+| `podAnnotations` | Additional Pod annotations                                                                                                                                                                                                                                                        | `{}` |
+| `livenessProbe` | Liveness probe configuration                                                                                                                                                                                                                                                      | `{"httpGet":{"path":"/auth/","port":"http"},"initialDelaySeconds":0,"timeoutSeconds":5}` |
+| `readinessProbe` | Readiness probe configuration                                                                                                                                                                                                                                                     | `{"httpGet":{"path":"/auth/realms/master","port":"http"},"initialDelaySeconds":30,"timeoutSeconds":1}` |
+| `startupProbe` | Startup probe configuration                                                                                                                                                                                                                                                       | `{"httpGet":{"path":"/auth/","port":"http"},"initialDelaySeconds":30,"timeoutSeconds":5, "failureThreshold": 60, "periodSeconds": 5}` |
+| `resources` | Pod resource requests and limits                                                                                                                                                                                                                                                  | `{}` |
+| `startupScripts` | Startup scripts to run before Keycloak starts up                                                                                                                                                                                                                                  | `{"keycloak.cli":"{{- .Files.Get "scripts/keycloak.cli" \| nindent 2 }}"}` |
+| `extraVolumes` | Add additional volumes, e. g. for custom themes                                                                                                                                                                                                                                   | `""` |
+| `extraVolumeMounts` | Add additional volumes mounts, e. g. for custom themes                                                                                                                                                                                                                            | `""` |
+| `extraPorts` | Add additional ports, e. g. for admin console or exposing JGroups ports                                                                                                                                                                                                           | `[]` |
+| `podDisruptionBudget` | Pod disruption budget                                                                                                                                                                                                                                                             | `{}` |
+| `statefulsetAnnotations` | Annotations for the StatefulSet                                                                                                                                                                                                                                                   | `{}` |
+| `statefulsetLabels` | Additional labels for the StatefulSet                                                                                                                                                                                                                                             | `{}` |
+| `secrets` | Configuration for secrets that should be created                                                                                                                                                                                                                                  | `{}` |
+| `service.annotations` | Annotations for headless and HTTP Services                                                                                                                                                                                                                                        | `{}` |
+| `service.labels` | Additional labels for headless and HTTP Services                                                                                                                                                                                                                                  | `{}` |
+| `service.type` | The Service type                                                                                                                                                                                                                                                                  | `ClusterIP` |
+| `service.loadBalancerIP` | Optional IP for the load balancer. Used for services of type LoadBalancer only                                                                                                                                                                                                    | `""` |
+| `loadBalancerSourceRanges` | Optional List of allowed source ranges (CIDRs). Used for service of type LoadBalancer only                                                                                                                                                                                        | `[]`  |
+| `service.externalTrafficPolicy` | Optional external traffic policy. Used for services of type LoadBalancer only                                                                                                                                                                                                     | `"Cluster"` |
+| `service.httpPort` | The http Service port                                                                                                                                                                                                                                                             | `80` |
+| `service.httpNodePort` | The HTTP Service node port if type is NodePort                                                                                                                                                                                                                                    | `""` |
+| `service.httpsPort` | The HTTPS Service port                                                                                                                                                                                                                                                            | `8443` |
+| `service.httpsNodePort` | The HTTPS Service node port if type is NodePort                                                                                                                                                                                                                                   | `""` |
+| `service.httpManagementPort` | The WildFly management Service port                                                                                                                                                                                                                                               | `9990` |
+| `service.httpManagementNodePort` | The WildFly management node port if type is NodePort                                                                                                                                                                                                                              | `""` |
+| `service.extraPorts` | Additional Service ports, e. g. for custom admin console                                                                                                                                                                                                                          | `[]` |
+| `service.sessionAffinity` | sessionAffinity for Service, e. g. "ClientIP"                                                                                                                                                                                                                                     | `""` |
+| `service.sessionAffinityConfig` | sessionAffinityConfig for Service                                                                                                                                                                                                                                                 | `{}` |
+| `ingress.enabled` | If `true`, an Ingress is created                                                                                                                                                                                                                                                  | `false` |
+| `ingress.rules` | List of Ingress Ingress rule                                                                                                                                                                                                                                                      | see below |
+| `ingress.rules[0].host` | Host for the Ingress rule                                                                                                                                                                                                                                                         | `{{ .Release.Name }}.keycloak.example.com` |
+| `ingress.rules[0].paths` | Paths for the Ingress rule                                                                                                                                                                                                                                                        | see below |
+| `ingress.rules[0].paths[0].path` | Path for the Ingress rule                                                                                                                                                                                                                                                         | `/` |
+| `ingress.rules[0].paths[0].pathType` | Path Type for the Ingress rule                                                                                                                                                                                                                                                    | `Prefix` |
+| `ingress.servicePort` | The Service port targeted by the Ingress                                                                                                                                                                                                                                          | `http` |
+| `ingress.annotations` | Ingress annotations                                                                                                                                                                                                                                                               | `{}` |
+| `ingress.ingressClassName` | The name of the Ingress Class associated with the ingress                                                                                                                                                                                                                         | `""` |
+| `ingress.labels` | Additional Ingress labels                                                                                                                                                                                                                                                         | `{}` |
+| `ingress.tls` | TLS configuration                                                                                                                                                                                                                                                                 | see below |
+| `ingress.tls[0].hosts` | List of TLS hosts                                                                                                                                                                                                                                                                 | `[keycloak.example.com]` |
+| `ingress.tls[0].secretName` | Name of the TLS secret                                                                                                                                                                                                                                                            | `""` |
+| `ingress.console.enabled` | If `true`, an Ingress for the console is created                                                                                                                                                                                                                                  | `false` |
+| `ingress.console.rules` | List of Ingress Ingress rule for the console                                                                                                                                                                                                                                      | see below |
+| `ingress.console.rules[0].host` | Host for the Ingress rule for the console                                                                                                                                                                                                                                         | `{{ .Release.Name }}.keycloak.example.com` |
+| `ingress.console.rules[0].paths` | Paths for the Ingress rule for the console                                                                                                                                                                                                                                        | see below |
+| `ingress.console.rules[0].paths[0].path` | Path for the Ingress rule for the console                                                                                                                                                                                                                                         | `[/auth/admin]` |
+| `ingress.console.rules[0].paths[0].pathType` | Path Type for the Ingress rule for the console                                                                                                                                                                                                                                    | `Prefix` |
+| `ingress.console.annotations` | Ingress annotations for the console                                                                                                                                                                                                                                               | `{}` |
+| `ingress.console.ingressClassName` | The name of the Ingress Class associated with the console ingress                                                                                                                                                                                                                 | `""` |
+| `ingress.console.tls` | TLS configuration                                                                                                                                                                                                                                                                 | see below |
+| `ingress.console.tls[0].hosts` | List of TLS hosts                                                                                                                                                                                                                                                                 | `[keycloak.example.com]` |
+| `ingress.console.tls[0].secretName` | Name of the TLS secret                                                                                                                                                                                                                                                            | `""` |
+| `networkPolicy.enabled` | If true, the ingress network policy is deployed                                                                                                                                                                                                                                   | `false`
+| `networkPolicy.extraFrom` | Allows to define allowed external traffic (see Kubernetes doc for network policy `from` format)                                                                                                                                                                                   | `[]`
+| `route.enabled` | If `true`, an OpenShift Route is created                                                                                                                                                                                                                                          | `false` |
+| `route.path` | Path for the Route                                                                                                                                                                                                                                                                | `/` |
+| `route.annotations` | Route annotations                                                                                                                                                                                                                                                                 | `{}` |
+| `route.labels` | Additional Route labels                                                                                                                                                                                                                                                           | `{}` |
+| `route.host` | Host name for the Route                                                                                                                                                                                                                                                           | `""` |
+| `route.tls.enabled` | If `true`, TLS is enabled for the Route                                                                                                                                                                                                                                           | `true` |
+| `route.tls.insecureEdgeTerminationPolicy` | Insecure edge termination policy of the Route. Can be `None`, `Redirect`, or `Allow`                                                                                                                                                                                              | `Redirect` |
+| `route.tls.termination` | TLS termination of the route. Can be `edge`, `passthrough`, or `reencrypt`                                                                                                                                                                                                        | `edge` |
+| `pgchecker.image.repository` | Docker image used to check Postgresql readiness at startup                                                                                                                                                                                                                        | `docker.io/busybox` |
+| `pgchecker.image.tag` | Image tag for the pgchecker image                                                                                                                                                                                                                                                 | `1.32` |
+| `pgchecker.image.pullPolicy` | Image pull policy for the pgchecker image                                                                                                                                                                                                                                         | `IfNotPresent` |
+| `pgchecker.securityContext` | SecurityContext for the pgchecker container                                                                                                                                                                                                                                       | `{"allowPrivilegeEscalation":false,"runAsGroup":1000,"runAsNonRoot":true,"runAsUser":1000}` |
+| `pgchecker.resources` | Resource requests and limits for the pgchecker container                                                                                                                                                                                                                          | `{"limits":{"cpu":"10m","memory":"16Mi"},"requests":{"cpu":"10m","memory":"16Mi"}}` |
+| `postgresql.enabled` | If `true`, the Postgresql dependency is enabled                                                                                                                                                                                                                                   | `true` |
+| `postgresql.postgresqlUsername` | PostgreSQL User to create                                                                                                                                                                                                                                                         | `keycloak` |
+| `postgresql.postgresqlPassword` | PostgreSQL Password for the new user                                                                                                                                                                                                                                              | `keycloak` |
+| `postgresql.postgresqlDatabase` | PostgreSQL Database to create                                                                                                                                                                                                                                                     | `keycloak` |
+| `serviceMonitor.enabled` | If `true`, a ServiceMonitor resource for the prometheus-operator is created                                                                                                                                                                                                       | `false` |
+| `serviceMonitor.namespace` | Optionally sets a target namespace in which to deploy the ServiceMonitor resource                                                                                                                                                                                                 | `""` |
+| `serviceMonitor.namespaceSelector` | Optionally sets a namespace selector for the ServiceMonitor                                                                                                                                                                                                                       | `{}` |
+| `serviceMonitor.annotations` | Annotations for the ServiceMonitor                                                                                                                                                                                                                                                | `{}` |
+| `serviceMonitor.labels` | Additional labels for the ServiceMonitor                                                                                                                                                                                                                                          | `{}` |
+| `serviceMonitor.interval` | Interval at which Prometheus scrapes metrics                                                                                                                                                                                                                                      | `10s` |
+| `serviceMonitor.scrapeTimeout` | Timeout for scraping                                                                                                                                                                                                                                                              | `10s` |
+| `serviceMonitor.path` | The path at which metrics are served                                                                                                                                                                                                                                              | `/metrics` |
+| `serviceMonitor.port` | The Service port at which metrics are served                                                                                                                                                                                                                                      | `http` |
+| `extraServiceMonitor.enabled` | If `true`, an additional ServiceMonitor resource for the prometheus-operator is created. Could be used for additional metrics via [Keycloak Metrics SPI](https://github.com/aerogear/keycloak-metrics-spi)                                                                        | `false` |
+| `extraServiceMonitor.namespace` | Optionally sets a target namespace in which to deploy the additional ServiceMonitor resource                                                                                                                                                                                      | `""` |
+| `extraServiceMonitor.namespaceSelector` | Optionally sets a namespace selector for the additional ServiceMonitor                                                                                                                                                                                                            | `{}` |
+| `extraServiceMonitor.annotations` | Annotations for the additional ServiceMonitor                                                                                                                                                                                                                                     | `{}` |
+| `extraServiceMonitor.labels` | Additional labels for the additional ServiceMonitor                                                                                                                                                                                                                               | `{}` |
+| `extraServiceMonitor.interval` | Interval at which Prometheus scrapes metrics                                                                                                                                                                                                                                      | `10s` |
+| `extraServiceMonitor.scrapeTimeout` | Timeout for scraping                                                                                                                                                                                                                                                              | `10s` |
+| `extraServiceMonitor.path` | The path at which metrics are served                                                                                                                                                                                                                                              | `/metrics` |
+| `extraServiceMonitor.port` | The Service port at which metrics are served                                                                                                                                                                                                                                      | `http` |
+| `prometheusRule.enabled` | If `true`, a PrometheusRule resource for the prometheus-operator is created                                                                                                                                                                                                       | `false` |
+| `prometheusRule.annotations` | Annotations for the PrometheusRule                                                                                                                                                                                                                                                | `{}` |
+| `prometheusRule.labels` | Additional labels for the PrometheusRule                                                                                                                                                                                                                                          | `{}` |
+| `prometheusRule.rules` | List of rules for Prometheus                                                                                                                                                                                                                                                      | `[]` |
+| `autoscaling.enabled` | Enable creation of a HorizontalPodAutoscaler resource                                                                                                                                                                                                                             | `false` |
+| `autoscaling.labels` | Additional labels for the HorizontalPodAutoscaler resource                                                                                                                                                                                                                        | `{}` |
+| `autoscaling.minReplicas` | The minimum number of Pods when autoscaling is enabled                                                                                                                                                                                                                            | `3` |
+| `autoscaling.maxReplicas` | The maximum number of Pods when autoscaling is enabled                                                                                                                                                                                                                            | `10` |
+| `autoscaling.metrics` | The metrics configuration for the HorizontalPodAutoscaler                                                                                                                                                                                                                         | `[{"resource":{"name":"cpu","target":{"averageUtilization":80,"type":"Utilization"}},"type":"Resource"}]` |
+| `autoscaling.behavior` | The scaling policy configuration for the HorizontalPodAutoscaler                                                                                                                                                                                                                  | `{"scaleDown":{"policies":[{"periodSeconds":300,"type":"Pods","value":1}],"stabilizationWindowSeconds":300}` |
+| `test.enabled` | If `true`, test resources are created                                                                                                                                                                                                                                             | `false` |
+| `test.image.repository` | The image for the test Pod                                                                                                                                                                                                                                                        | `docker.io/unguiculus/docker-python3-phantomjs-selenium` |
+| `test.image.tag` | The tag for the test Pod image                                                                                                                                                                                                                                                    | `v1` |
+| `test.image.pullPolicy` | The image pull policy for the test Pod image                                                                                                                                                                                                                                      | `IfNotPresent` |
+| `test.podSecurityContext` | SecurityContext for the entire test Pod                                                                                                                                                                                                                                           | `{"fsGroup":1000}` |
+| `test.securityContext` | SecurityContext for the test container                                                                                                                                                                                                                                            | `{"runAsNonRoot":true,"runAsUser":1000}` |
+| `test.deletionPolicy` | `helm.sh/hook-delete-policy` for the test Pod | `before-hook-creation` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example:
 
 ```console
-$ helm install keycloak codecentric/keycloak -n keycloak --version=9.0.0 --set replicas=1
+$ helm install keycloak codecentric/keycloak -n keycloak --set replicas=1
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while
 installing the chart. For example:
 
 ```console
-$ helm install keycloak codecentric/keycloak -n keycloak --version=9.0.0 --values values.yaml
+$ helm install keycloak codecentric/keycloak -n keycloak --values values.yaml
 ```
 
 The chart offers great flexibility.
@@ -179,6 +220,8 @@ It is used for the following values:
 * `extraVolumes`
 * `livenessProbe`
 * `readinessProbe`
+* `startupProbe`
+* `topologySpreadConstraints`
 
 Additionally, custom labels and annotations can be set on various resources the values of which being passed through `tpl` as well.
 
@@ -191,7 +234,7 @@ See example for Google Cloud Proxy or default affinity configuration in `values.
 Keycloak sets the following system properties by default:
 `-Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=$JBOSS_MODULES_SYSTEM_PKGS -Djava.awt.headless=true`
 
-You can override thes by setting the `JAVA_OPTS` environment variable.
+You can override these by setting the `JAVA_OPTS` environment variable.
 Make sure you configure container support.
 This allows you to only configure memory using Kubernetes resources and the JVM will automatically adapt.
 
@@ -297,7 +340,10 @@ Please refer to the section on database configuration for how to configure a sec
 
 For high availability, Keycloak must be run with multiple replicas (`replicas > 1`).
 The chart has a helper template (`keycloak.serviceDnsName`) that creates the DNS name based on the headless service.
-With that, JGroups discovery via DNS_PING can be configured as follows:
+
+#### DNS_PING Service Discovery
+
+JGroups discovery via DNS_PING can be configured as follows:
 
 ```yaml
 extraEnv: |
@@ -309,6 +355,70 @@ extraEnv: |
     value: "2"
   - name: CACHE_OWNERS_AUTH_SESSIONS_COUNT
     value: "2"
+```
+
+#### KUBE_PING Service Discovery
+
+Recent versions of Keycloak include a new Kubernetes native [KUBE_PING](https://github.com/jgroups-extras/jgroups-kubernetes) service discovery protocol.
+This requires a little more configuration than DNS_PING but can easily be achieved with the Helm chart.
+
+As with DNS_PING some environment variables must be configured as follows:
+
+```yaml
+extraEnv: |
+  - name: JGROUPS_DISCOVERY_PROTOCOL
+    value: kubernetes.KUBE_PING
+  - name: KUBERNETES_NAMESPACE
+    valueFrom:
+      fieldRef:
+        apiVersion: v1
+        fieldPath: metadata.namespace
+  - name: CACHE_OWNERS_COUNT
+    value: "2"
+  - name: CACHE_OWNERS_AUTH_SESSIONS_COUNT
+    value: "2"
+```
+
+However, the Keycloak Pods must also get RBAC permissions to `get` and `list` Pods in the namespace which can be configured as follows:
+
+```yaml
+rbac:
+  create: true
+  rules:
+    - apiGroups:
+        - ""
+      resources:
+        - pods
+      verbs:
+        - get
+        - list
+```
+
+#### Autoscaling
+
+Due to the caches in Keycloak only replicating to a few nodes (two in the example configuration above) and the limited controls around autoscaling built into Kubernetes, it has historically been problematic to autoscale Keycloak.
+However, in Kubernetes 1.18 [additional controls were introduced](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-configurable-scaling-behavior) which make it possible to scale down in a more controlled manner.
+
+The example autoscaling configuration in the values file scales from three up to a maximum of ten Pods using CPU utilization as the metric. Scaling up is done as quickly as required but scaling down is done at a maximum rate of one Pod per five minutes.
+
+Autoscaling can be enabled as follows:
+
+```yaml
+autoscaling:
+  enabled: true
+```
+
+KUBE_PING service discovery seems to be the most reliable mechanism to use when enabling autoscaling, due to being faster than DNS_PING at detecting changes in the cluster.
+
+### Running Keycloak Behind a Reverse Proxy
+
+When running Keycloak behind a reverse proxy, which is the case when using an ingress controller,
+proxy address forwarding must be enabled as follows:
+
+```yaml
+extraEnv: |
+  - name: PROXY_ADDRESS_FORWARDING
+    value: "true"
 ```
 
 ### Providing a Custom Theme
@@ -454,7 +564,7 @@ livenessProbe: |
   httpGet:
     path: {{ if ne .Values.contextPath "" }}/{{ .Values.contextPath }}{{ end }}/
     port: http
-  initialDelaySeconds: 300
+  initialDelaySeconds: 0
   timeoutSeconds: 5
 
 readinessProbe: |
@@ -463,9 +573,18 @@ readinessProbe: |
     port: http
   initialDelaySeconds: 30
   timeoutSeconds: 1
+
+startupProbe: |
+  httpGet:
+    path: /auth/
+    port: http
+  initialDelaySeconds: 30
+  timeoutSeconds: 1
+  failureThreshold: 60
+  periodSeconds: 5
 ```
 
-The above YAML references introduces the custom value `contextPath` which is possible because `startupScripts`, `livenessProbe`, and `readinessProbe` are templated using the `tpl` function.
+The above YAML references introduces the custom value `contextPath` which is possible because `startupScripts`, `livenessProbe`, `readinessProbe`, and `startupProbe` are templated using the `tpl` function.
 Note that it must not start with a slash.
 Alternatively, you may supply it via CLI flag:
 
@@ -475,8 +594,10 @@ Alternatively, you may supply it via CLI flag:
 
 ### Prometheus Metrics Support
 
-Keycloak can expose metrics on the management port.
-In order to achieve this, the port needs to be added and the environment variable `KEYCLOAK_STATISTICS` must be set.
+#### WildFly Metrics
+
+WildFly can expose metrics on the management port.
+In order to achieve this, the environment variable `KEYCLOAK_STATISTICS` must be set.
 
 ```yaml
 extraEnv: |
@@ -503,6 +624,32 @@ service:
     prometheus.io/port: "9990"
 ```
 
+#### Keycloak Metrics SPI
+
+Optionally, it is possible to add [Keycloak Metrics SPI](https://github.com/aerogear/keycloak-metrics-spi) via init container.
+
+A separate `ServiceMonitor` can be enabled to scrape metrics from the SPI:
+
+```yaml
+extraServiceMonitor:
+  # If `true`, an additional ServiceMonitor resource for the prometheus-operator is created
+  enabled: true
+```
+
+Checkout `values.yaml` for customizing this ServiceMonitor.
+
+Note that the metrics endpoint is exposed on the HTTP port.
+You may want to restrict access to it in your ingress controller configuration.
+For ingress-nginx, this could be done as follows:
+
+```yaml
+annotations:
+  nginx.ingress.kubernetes.io/server-snippet: |
+    location ~* /auth/realms/[^/]+/metrics {
+        return 403;
+    }
+```
+
 ## Why StatefulSet?
 
 The chart sets node identifiers to the system property `jboss.node.name` which is in fact the pod name.
@@ -513,7 +660,111 @@ Using a StatefulSet allows us to truncate to 20 characters leaving room for up t
 Additionally, we get stable values for `jboss.node.name` which can be advantageous for cluster discovery.
 The headless service that governs the StatefulSet is used for DNS discovery via DNS_PING.
 
+## Bad Gateway and Proxy Buffer Size in Nginx
+
+A common issue with Keycloak and nginx is that the proxy buffer may be too small for what Keycloak is trying to send. This will result in a Bad Gateway (502) error. There are [many](https://github.com/kubernetes/ingress-nginx/issues/4637) [issues](https://stackoverflow.com/questions/56126864/why-do-i-get-502-when-trying-to-authenticate) around the internet about this. The solution is to increase the buffer size of nginx. This can be done by creating an annotation in the ingress specification:
+
+```yaml
+ingress:
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
+```
+
 ## Upgrading
+
+### From chart < 17.0.1
+
+* Keycloak is updated to 17.0.1
+* Use image from quay.io/keycloak/keycloak
+
+Note that we now need to add the `-legacy` suffix for the `Keycloak Legacy` image for the Wildfly based Keycloak as documented in [this Keycloak Blog Post](https://www.keycloak.org/2022/02/keycloak-1700-released#_migrating_from_the_preview_quarkus_distribution),
+e.g.: `quay.io/keycloak/keycloak:17.0.1-legacy`.
+
+
+Please read the additional notes about [Migrating to 17.0.0](https://www.keycloak.org/docs/latest/upgrading/index.html#migrating-to-17-0-0) in the Keycloak documentation.
+
+### From chart < 16.0.0
+
+* Keycloak is updated to 16.1.1
+
+Please read the additional notes about [Migrating to 16.0.0](https://www.keycloak.org/docs/latest/upgrading/index.html#migrating-to-16-0-0) in the Keycloak documentation.
+
+### From chart < 15.0.0
+
+* Keycloak is updated to 15.0.2
+
+### From chart < 14.0.0
+
+Ingress path definitions are extended to describe path and pathType. Previously only the path was configured. Please adapt your configuration as shown below:
+
+Old:
+```yaml
+ingress:
+  # ...
+  rules:
+    - # ...
+      # Paths for the host
+      paths:
+        - /
+```
+New:
+```yaml
+ingress:
+  # ...
+  rules:
+    - # ...
+      # Paths for the host
+      paths:
+        - path: /
+          pathType: Prefix
+```
+
+This allows to configure specific `pathType` configurations, e.g. `pathType: ImplementationSpecific` for [GKE Ingress on Google Cloud Platform](https://cloud.google.com/kubernetes-engine/docs/concepts/ingress#default_backend).
+
+### From chart < 13.0.0
+
+* Keycloak is updated to 14.0.0
+
+Note that this might not be a seamless upgrade, because the clustering with older Keycloak versions might not work
+due to incompatible infinispan versions.
+
+### From chart < 12.0.0
+
+* Keycloak is updated to 13.0.1
+
+Note that this might not be a seamless upgrade, because the clustering with older Keycloak versions might not work
+due to incompatible infinispan versions.
+
+One way to perform the upgrade is to run:
+```
+kubectl delete sts <RELEASE_NAME>-keycloak && helm upgrade --install
+```
+This ensures that all replicas are restarted with the same version.
+Note that all sessions are lost in this case, and users might need to login again.
+
+### From chart < 11.0.0
+
+When you are using the postgresql subchart (which is not recommended for production situations), you will need to migrate the statefulset governing the postgresql pod.
+The upgrade will cause some immutable fields of the statefulset to be modified, which cannot be done in place.
+You will have to manually remove the statefulset before doing the Helm upgrade.
+The following procedure takes care of this:
+
+1. Remove the old statefulset (associated PVC will remain in place): `kubectl delete statefulset -n <your ns> <name of your psql statefulset>`
+1. Helm Upgrade: `helm upgrade -n <your ns> ... <your release>`
+
+### From chart < 10.0.0
+
+* Keycloak is updated to 12.0.4
+
+Note that this might not be a seamless upgrade, because the clustering with older Keycloak versions might not work
+due to incompatible infinispan versions.
+
+One way to perform the upgrade is to run:
+```
+kubectl delete sts <RELEASE_NAME>-keycloak && helm upgrade --install
+```
+This ensures that all replicas are restarted with the same version.
+Note that all sessions are lost in this case, and users might need to login again.
 
 ### From chart versions < 9.0.0
 
@@ -585,6 +836,19 @@ The defaults are unchanged, but since 6.0.0 configured as follows:
     timeoutSeconds: 1
 ```
 
+startup probe was added in 10.2.0 and is configured as follows:
+
+```yaml
+  startupProbe: |
+    httpGet:
+      path: /auth/
+      port: http
+    initialDelaySeconds: 30
+    timeoutSeconds: 1
+    failureThreshold: 60
+    periodSeconds: 5
+```
+
 #### Changes in Existing Secret Configuration
 
 This can be useful if you create a secret in a parent chart and want to reference that secret.
@@ -637,4 +901,3 @@ kubectl label pod -n "$namespace" -l app=keycloak -l release="$release" app.kube
 **NOTE:** Version 5.0.0 also updates the Postgresql dependency which has received a major upgrade as well.
 In case you use this dependency, the database must be upgraded first.
 Please refer to the Postgresql chart's upgrading section in its README for instructions.
-
