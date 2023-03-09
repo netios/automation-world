@@ -297,7 +297,7 @@ ingress:
     -
       # Ingress host
       #host: '{{ .Release.Name }}.keycloak.example.com'
-      host: 'keycloak2.icarusean.com'
+      host: 'keycloak2.lovissoft.com'
       # Paths for the host
       paths:
         - path: /
@@ -305,8 +305,8 @@ ingress:
   # TLS configuration
   tls:
     - hosts:
-        - keycloak2.icarusean.com
-      secretName: 20220121-icarusean
+        - keycloak2.lovissoft.com
+      secretName: 20220121-lovissoft
 
   # ingress for console only (/auth/admin)
   console:
