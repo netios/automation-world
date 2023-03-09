@@ -201,8 +201,8 @@ resources: {}
 # Startup scripts to run before Keycloak starts up
 startupScripts:
   # WildFly CLI script for configuring the node-identifier
-  #keycloak.cli: |
-  #  {{- .Files.Get "scripts/keycloak.cli" }}
+  keycloak.cli: |
+    {{- .Files.Get "scripts/keycloak.cli" }}
   # mystartup.sh: |
   #   #!/bin/sh
   #
