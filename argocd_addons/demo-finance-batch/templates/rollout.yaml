@@ -20,7 +20,7 @@ spec:
       - name: finance-batch
         image: nginx:{{ .Values.tag }}
         ports:
-        - containerPort: 80
+          - containerPort: 80
         readinessProbe:
           initialDelaySeconds: 10
           failureThreshold: 3
