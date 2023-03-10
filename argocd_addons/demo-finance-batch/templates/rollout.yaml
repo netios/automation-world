@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
-  name: finance-batch-finance
+  name: finance-batch
   namespace: finance
 spec:
   replicas: 2
