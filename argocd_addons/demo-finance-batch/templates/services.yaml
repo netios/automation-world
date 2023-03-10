@@ -12,7 +12,7 @@ spec:
     name: http
   selector:
     app: finance-batch
-    project: finance
+    project: finance-batch
     release: {{ .Release.Name }}
 ---
 apiVersion: v1
