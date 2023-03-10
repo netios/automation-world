@@ -8,11 +8,15 @@ spec:
   selector:
     matchLabels:
       app: finance-batch
+      project: finance-batch
+      release: finance-batch
   template:
     metadata:
 #      namespace: finance
       labels:
         app: finance-batch
+        project: finance-batch
+        release: finance-batch
     spec:
       containers:
       - name: finance-batch
