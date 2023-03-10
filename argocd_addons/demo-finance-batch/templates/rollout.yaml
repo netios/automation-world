@@ -45,8 +45,6 @@ spec:
             topologyKey: "topology.kubernetes.io/zone"        
       nodeSelector:
         nodetype: dev
-      imagePullSecrets:
-      - name: regcred
       containers:
       - name: finance-batch
         image: nginx:{{ .Values.tag }}
