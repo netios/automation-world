@@ -1,0 +1,35 @@
+---
+apiVersion: extensions/v1
+kind: Ingress
+metadata:
+  name: finance-batch-ingress
+  namespace: finance
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: batch.lovissoft.com
+    http:
+      paths:
+      - backend:
+          serviceName: finance-batch
+          servicePort: 80
+---
+apiVersion: extensions/v1
+kind: Ingress
+metadata:
+  name: finance-batch-ingress-preview
+  namespace: finance
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: pre-batch.lovissoft.com
+    http:
+      paths:
+      - backend:
+          serviceName: finance-batch-preview
+          servicePort: 80
+

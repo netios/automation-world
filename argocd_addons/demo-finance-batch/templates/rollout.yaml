@@ -1,0 +1,74 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: finance-batch
+  namespace: finance
+  labels:
+    app: finance-batch
+    project: finance
+    release: {{ .Release.Name }}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      project: finance
+      app: finance-batch
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      namespace: finance
+      labels:
+        project: finance
+        app: finance-batch
+        release: {{ .Release.Name }}
+    spec:
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - finance-batch
+              topologyKey: "kubernetes.io/hostname"
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - finance-batch
+            topologyKey: "topology.kubernetes.io/zone"        
+      nodeSelector:
+        nodetype: product
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: finance-batch
+        image: nginx:{{ .Values.tag }}
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+          name: http
+        livenessProbe:
+          initialDelaySeconds: 20
+          failureThreshold: 5
+          periodSeconds: 10
+          httpGet:
+            path: /
+            port: http
+        readinessProbe:
+          initialDelaySeconds: 10
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: http
+  strategy:
+    blueGreen:
+      activeService: finance-batch
+      previewService: finance-batch-preview
+      autoPromotionEnabled: false
