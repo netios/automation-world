@@ -21,10 +21,10 @@ spec:
         - containerPort: 80
         readinessProbe:
           initialDelaySeconds: 10
-          failureThreshold: 3
+          periodSeconds: 5
           httpGet:
             path: /
-            port: http
+            port: 80
   strategy:
     blueGreen:
       activeService: finance-batch
