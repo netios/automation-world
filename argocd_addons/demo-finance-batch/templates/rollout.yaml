@@ -29,4 +29,4 @@ spec:
     blueGreen:
       activeService: finance-batch
       previewService: finance-batch-preview
-      autoPromotionEnabled: true
+      autoPromotionEnabled: false
