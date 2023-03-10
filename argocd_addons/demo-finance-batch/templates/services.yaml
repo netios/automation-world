@@ -28,4 +28,5 @@ spec:
     name: http
   selector:
     app: finance-batch
+    project: finance-batch
     release: {{ .Release.Name }}
