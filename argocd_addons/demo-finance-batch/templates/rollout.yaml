@@ -5,23 +5,17 @@ metadata:
   namespace: finance
   labels:
     app: finance-batch
-    project: finance
-    release: {{ .Release.Name }}
 spec:
   replicas: 2
   revisionHistoryLimit: 2
   selector:
     matchLabels:
-      project: finance
       app: finance-batch
-      release: {{ .Release.Name }}
   template:
     metadata:
       namespace: finance
       labels:
-        project: finance
         app: finance-batch
-        release: {{ .Release.Name }}
     spec:
       containers:
       - name: finance-batch
