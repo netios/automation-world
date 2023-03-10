@@ -4,7 +4,7 @@ metadata:
   name: finance-batch-hpa
   namespace: finance
 spec:
-  maxReplicas: 1
+  maxReplicas: 2
   minReplicas: 1
   scaleTargetRef:
     apiVersion: argoproj.io/v1alpha1
