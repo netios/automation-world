@@ -6,7 +6,7 @@ metadata:
   labels:
     app: finance-batch
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 2
   selector:
     matchLabels:
@@ -22,15 +22,6 @@ spec:
         image: nginx:{{ .Values.tag }}
         ports:
         - containerPort: 80
-          protocol: TCP
-          name: http
-        livenessProbe:
-          initialDelaySeconds: 20
-          failureThreshold: 5
-          periodSeconds: 10
-          httpGet:
-            path: /
-            port: http
         readinessProbe:
           initialDelaySeconds: 10
           failureThreshold: 3
