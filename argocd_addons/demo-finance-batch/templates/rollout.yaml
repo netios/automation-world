@@ -10,7 +10,7 @@ spec:
       app: finance-batch
   template:
     metadata:
-      namespace: finance
+#      namespace: finance
       labels:
         app: finance-batch
     spec:
