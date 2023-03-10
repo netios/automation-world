@@ -8,6 +8,7 @@ metadata:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
+  ingressClassName: nginx-new
   rules:
   - host: batch.lovissoft.com
     http:
@@ -25,6 +26,7 @@ metadata:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
+  ingressClassName: nginx-new
   rules:
   - host: pre-batch.lovissoft.com
     http:
