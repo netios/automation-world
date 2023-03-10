@@ -44,7 +44,7 @@ spec:
                 - finance-batch
             topologyKey: "topology.kubernetes.io/zone"        
       nodeSelector:
-        nodetype: product
+        nodetype: dev
       imagePullSecrets:
       - name: regcred
       containers:
