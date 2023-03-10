@@ -23,28 +23,6 @@ spec:
         app: finance-batch
         release: {{ .Release.Name }}
     spec:
-      affinity:
-        podAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - finance-batch
-              topologyKey: "kubernetes.io/hostname"
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - finance-batch
-            topologyKey: "topology.kubernetes.io/zone"        
-      nodeSelector:
-        nodetype: dev
       containers:
       - name: finance-batch
         image: nginx:{{ .Values.tag }}
