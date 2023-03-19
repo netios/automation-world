@@ -10,3 +10,10 @@ curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/kube
 ```bash
 curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/terraform_helm_init.sh | bash
 ```
+
+## k9s
+```bash
+curl -sS https://webinstall.dev/k9s | bash
+```
+
+##
