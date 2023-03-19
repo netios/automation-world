@@ -16,4 +16,7 @@ curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/terr
 curl -sS https://webinstall.dev/k9s | bash
 ```
 
-##
+## rsync
+sudo cat "127.0.0.1 MYHOST" >> /etc/hosts
+curl -v telnet://) telnet [MYHOST]:873
+rsync -avz [MYHOST]::[LOCAL_DIR] [REMOTE_SOURCE_DIR]
