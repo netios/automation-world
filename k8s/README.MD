@@ -11,6 +11,11 @@ curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/kube
 curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/terraform_helm_init.sh | bash
 ```
 
+## zsh
+```bash
+sudo apt install zsh
+```
+
 ## k9s
 ```bash
 curl -sS https://webinstall.dev/k9s | bash
