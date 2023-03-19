@@ -9,7 +9,8 @@ if [ ! -d "$DIRECTORY" ]; then
   mkdir -p $DIRECTORY
 fi
 cd $DIRECTORY
-curl -L -s $(curl -L  -s https://github.com/hidetatz/kubecolor/releases/latest | egrep '<a.+Linux_x86_64.tar.gz' | awk -F\" '{print "https://github.com"$2}') | tar -zx
+GETVER=$(curl -L  -s https://github.com/hidetatz/kubecolor/releases/latest | egrep "<title>Release" | awk '{print $2}' | tr -d 'v')
+curl -L -s https://github.com/hidetatz/kubecolor/releases/download/v${GETVER}/kubecolor_${GETVER}_Linux_x86_64.tar.gz | tar -zx
 cd $RUN_DIRECTORY
 if [ -f "$LINKFILE" ]; then
   # echo $LINKFILE exist.
