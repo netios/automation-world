@@ -14,6 +14,7 @@ curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/terr
 ## zsh
 ```bash
 sudo apt install zsh
+curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/ps_zsh.sh | bash
 ```
 
 ## k9s
