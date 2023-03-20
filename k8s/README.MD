@@ -28,3 +28,9 @@ sudo cat "127.0.0.1 MYHOST" >> /etc/hosts
 curl -v telnet://) telnet [MYHOST]:873
 rsync -avz [MYHOST]::[LOCAL_DIR] [REMOTE_SOURCE_DIR]
 ```
+## awscli v2
+```bash
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+```
