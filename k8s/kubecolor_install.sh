@@ -24,5 +24,10 @@ if [ -f "$LINKFILE" ]; then
 fi
 #ln -s ${DIRECTORY}${APPFILE} $LINKFILE    # not use, will remove [R01]
 #chmod +x $LINKFILE   # not use, will remove [R01]
+
 export PATH=$PATH:$HOME/bin
+
+/bin/mv $HOME/bin/kubecolor $HOME/bin/kubecolor_v${GETVER}
+/bin/cp $HOME/bin/kubecolor_v${GETVER} $HOME/bin/
+
 echo "==== kubecolor install done. ===="
