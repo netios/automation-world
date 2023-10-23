@@ -2,7 +2,7 @@
 RUN_DIRECTORY=~/bin/
 DIRECTORY=~/bin/kubecolor/
 APPFILE=kubecolor
-LINKFILE=k
+#LINKFILE=k   # not use, will remove [R01]
 #===========================
 if [ ! -d "$DIRECTORY" ]; then
   # echo $DIRECTORY not exist.
@@ -22,7 +22,7 @@ if [ -f "$LINKFILE" ]; then
   rm $LINKFILE
   # ln -s -f ${DIRECTORY}${APPFILE} $LINKFILE
 fi
-ln -s ${DIRECTORY}${APPFILE} $LINKFILE
-chmod +x $LINKFILE
+#ln -s ${DIRECTORY}${APPFILE} $LINKFILE    # not use, will remove [R01]
+#chmod +x $LINKFILE   # not use, will remove [R01]
 export PATH=$PATH:$HOME/bin
 echo "==== kubecolor install done. ===="
