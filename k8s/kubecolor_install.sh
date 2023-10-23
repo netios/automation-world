@@ -28,6 +28,7 @@ fi
 export PATH=$PATH:$HOME/bin
 
 /bin/mv $HOME/bin/kubecolor $HOME/bin/kubecolor_v${GETVER} -f
-/bin/cp $HOME/bin/kubecolor_v${GETVER}/kubecolor $HOME/bin/ -i
+/bin/cp $HOME/bin/kubecolor_v${GETVER}/kubecolor $HOME/bin/kubecolor -nf
 
 echo "==== kubecolor install done. ===="
+
