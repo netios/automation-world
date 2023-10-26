@@ -15,6 +15,11 @@ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/kubecolor_install.sh | bash
 ```
 
+## opentofu ( ubuntu )
+```bash
+sudo snap install opentofu --classic
+```
+
 ## terraform
 ```bash
 curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/terraform_helm_init.sh | bash
