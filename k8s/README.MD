@@ -14,10 +14,11 @@ echo "export FZF_DEFAULT_OPTS=\"--preview 'bat --theme 1337 --color=always {}'\"
 echo "export FZF_DEFAULT_OPTS=\"--preview 'bat --theme GitHub --color=always {}'\"" >> ~/.zshrc
 source ~/.zshrc 
 
-delta # diff
+# delta ( diff )
 wget https://github.com/dandavison/delta/releases/download/0.16.5/git-delta-musl_0.16.5_amd64.deb
 sudo dpkg -i git-delta-musl_0.16.5_amd64.deb
-
+echo "export DELTA_FEATURES='+side-by-side my-feature'" >> ~/.zshrc
+source ~/.zshrc 
 ```
 ## kubectl
 ```bash
