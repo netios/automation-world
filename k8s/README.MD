@@ -1,8 +1,13 @@
 ### webinstall for k8s by sean.lee (2022.07~)  
-## column , jq ( Essential utility )
+## column , jq , fzf , bat ( Essential utility )
 ```bash
-sudo apt-get install bsdmainutils
+sudo apt install -y bsdmainutils
 sudo apt install -y jq
+sudo apt install -y fzf
+sudo apt install -y bat
+ln -s /usr/bin/batcat ~/.local/bin/bat 
+# ~/.zshrc 
+export FZF_DEFAULT_OPTS="--preview 'bat --theme GitHub --color=always {}'"
 ```
 ## kubectl
 ```bash
