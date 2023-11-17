@@ -7,7 +7,8 @@ sudo apt install -y fzf
 sudo apt install -y bat
 ln -s /usr/bin/batcat ~/.local/bin/bat 
 # ~/.zshrc 
-export FZF_DEFAULT_OPTS="--preview 'bat --theme GitHub --color=always {}'"
+echo "export FZF_DEFAULT_OPTS=\"--preview 'bat --theme GitHub --color=always {}'\"" >> ~/.zshrc
+source ~/.zshrc 
 ```
 ## kubectl
 ```bash
