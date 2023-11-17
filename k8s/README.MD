@@ -7,6 +7,9 @@ sudo apt install -y fzf
 sudo apt install -y bat
 ln -s /usr/bin/batcat ~/.local/bin/bat 
 # ~/.zshrc 
+# For Dark Background
+echo "export FZF_DEFAULT_OPTS=\"--preview 'bat --theme 1337 --color=always {}'\"" >> ~/.zshrc
+# For Bright Background
 echo "export FZF_DEFAULT_OPTS=\"--preview 'bat --theme GitHub --color=always {}'\"" >> ~/.zshrc
 source ~/.zshrc 
 ```
