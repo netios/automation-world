@@ -13,6 +13,11 @@ echo "export FZF_DEFAULT_OPTS=\"--preview 'bat --theme 1337 --color=always {}'\"
 # For Bright Background
 echo "export FZF_DEFAULT_OPTS=\"--preview 'bat --theme GitHub --color=always {}'\"" >> ~/.zshrc
 source ~/.zshrc 
+
+delta # diff
+wget https://github.com/dandavison/delta/releases/download/0.16.5/git-delta-musl_0.16.5_amd64.deb
+sudo dpkg -i git-delta-musl_0.16.5_amd64.deb
+
 ```
 ## kubectl
 ```bash
