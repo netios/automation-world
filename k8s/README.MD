@@ -18,6 +18,25 @@ source ~/.zshrc
 wget https://github.com/dandavison/delta/releases/download/0.16.5/git-delta-musl_0.16.5_amd64.deb
 sudo dpkg -i git-delta-musl_0.16.5_amd64.deb
 echo "export DELTA_FEATURES='+side-by-side'" >> ~/.zshrc
+# ~/.gitconfig
+[core]
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    features = my-dark-theme zebra-dark
+    navigate = true
+    side-by-side = true
+    line-numbers-left-format = ""
+    line-numbers-right-format = "│ "
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
+
 source ~/.zshrc 
 ```
 ## kubectl
