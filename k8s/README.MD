@@ -5,6 +5,7 @@ sudo apt install -y bsdmainutils
 sudo apt install -y jq
 sudo apt install -y fzf
 sudo apt install -y tree
+sudo apt install -y duf
 sudo apt install -y bat
 ln -s /usr/bin/batcat ~/.local/bin/bat 
 # ~/.zshrc 
