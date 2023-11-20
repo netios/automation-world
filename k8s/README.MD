@@ -37,6 +37,12 @@ sudo dpkg -i git-delta-musl_0.16.5_amd64.deb
     colorMoved = default
 
 ```
+
+## xh ( new curl )
+```bash
+curl -sfL https://raw.githubusercontent.com/ducaale/xh/master/install.sh | sh
+```
+
 ## kubectl
 ```bash
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
