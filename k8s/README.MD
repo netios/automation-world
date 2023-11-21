@@ -16,7 +16,7 @@ echo "export FZF_DEFAULT_OPTS=\"--preview 'bat --theme GitHub --color=always {}'
 source ~/.zshrc 
 
 # delta ( diff )
-wget https://github.com/dandavison/delta/releases/download/0.16.5/git-delta-musl_0.16.5_amd64.deb
+xh -d https://github.com/dandavison/delta/releases/download/0.16.5/git-delta-musl_0.16.5_amd64.deb
 sudo dpkg -i git-delta-musl_0.16.5_amd64.deb
 # ~/.gitconfig
 [core]
