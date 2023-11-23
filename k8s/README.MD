@@ -69,6 +69,7 @@ curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/terr
 ```bash
 sudo apt install zsh
 curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/ps_zsh.sh | bash
+chsh -s /usr/bin/zsh
 ```
 
 ## k9s
