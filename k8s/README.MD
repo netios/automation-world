@@ -3,6 +3,7 @@
 ```bash
 sudo apt install -y bsdmainutils
 sudo apt install -y jq
+sudo apt install -y ipcalc
 sudo apt install -y fzf
 sudo apt install -y tree
 sudo apt install -y duf
