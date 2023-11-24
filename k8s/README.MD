@@ -70,6 +70,7 @@ curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/terr
 sudo apt install zsh
 curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/ps_zsh.sh | bash
 chsh -s /usr/bin/zsh
+# sudo useradd -m -s /bin/bash <username> # hd
 # sudo usermod -aG sudo <username> # hd
 ```
 
