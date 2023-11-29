@@ -54,6 +54,10 @@ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 ```bash
 curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/kubecolor_install.sh | bash
 ```
+### Helm3 ( ubuntu base )
+```bash
+sudo snap install helm --classic
+```
 
 ## opentofu ( ubuntu )
 ```bash
