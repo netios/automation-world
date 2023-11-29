@@ -44,6 +44,13 @@ sudo dpkg -i git-delta-musl_0.16.5_amd64.deb
 curl -sfL https://raw.githubusercontent.com/ducaale/xh/master/install.sh | sh
 ```
 
+## awscli v2
+```bash
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+```
+
 ## kubectl
 ```bash
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -89,10 +96,4 @@ curl -sS https://webinstall.dev/k9s | bash
 sudo cat "127.0.0.1 MYHOST" >> /etc/hosts
 curl -v telnet://) telnet [MYHOST]:873
 rsync -avz [MYHOST]::[LOCAL_DIR] [REMOTE_SOURCE_DIR]
-```
-## awscli v2
-```bash
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
-sudo ./aws/install
 ```
