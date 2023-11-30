@@ -3,12 +3,23 @@
 ## Work-Ubuntu StarterPack ( AllinOne )
 ```bash
 curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/ps_zsh.sh | bash
-chsh -s /usr/bin/zsh
+
+# chsh -s /usr/bin/zsh
 # sudo useradd -m -s /bin/bash <username> # hd
 # sudo usermod -aG sudo <username> # hd
 ```
 
 ---
+
+## rsync
+```bash
+sudo cat "127.0.0.1 MYHOST" >> /etc/hosts
+curl -v telnet://) telnet [MYHOST]:873
+rsync -avz [MYHOST]::[LOCAL_DIR] [REMOTE_SOURCE_DIR]
+```
+---
+
+# StarterPack List
 
 ## column , jq , fzf , bat ( Essential utility )
 ```bash
@@ -93,9 +104,4 @@ curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/terr
 curl -sS https://webinstall.dev/k9s | bash
 ```
 
-## rsync
-```bash
-sudo cat "127.0.0.1 MYHOST" >> /etc/hosts
-curl -v telnet://) telnet [MYHOST]:873
-rsync -avz [MYHOST]::[LOCAL_DIR] [REMOTE_SOURCE_DIR]
-```
+
