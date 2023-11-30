@@ -1,4 +1,15 @@
 ### webinstall for k8s by sean.lee (2022.07~)  
+
+## Work-Ubuntu StarterPack ( AllinOne )
+```bash
+curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/ps_zsh.sh | bash
+chsh -s /usr/bin/zsh
+# sudo useradd -m -s /bin/bash <username> # hd
+# sudo usermod -aG sudo <username> # hd
+```
+
+---
+
 ## column , jq , fzf , bat ( Essential utility )
 ```bash
 sudo apt install -y bsdmainutils
@@ -75,15 +86,6 @@ sudo snap install opentofu --classic
 ## terraform
 ```bash
 curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/terraform_helm_init.sh | bash
-```
-
-## zsh
-```bash
-sudo apt install zsh
-curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/ps_zsh.sh | bash
-chsh -s /usr/bin/zsh
-# sudo useradd -m -s /bin/bash <username> # hd
-# sudo usermod -aG sudo <username> # hd
 ```
 
 ## k9s
