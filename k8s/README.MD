@@ -1,6 +1,6 @@
 ### webinstall for k8s by sean.lee (2022.07~)  
 
-## Work-Ubuntu StarterPack ( AllinOne )
+## Work-ubuntu StarterPack ( All in One )
 ```bash
 curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/ps_zsh.sh | bash
 
