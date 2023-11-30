@@ -1,6 +1,6 @@
 ### webinstall for k8s by sean.lee (2022.07~)  
 
-## Work-ubuntu StarterPack ( All in One )
+# Work-ubuntu starter pack ( All in One )
 ```bash
 curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/ps_zsh.sh | bash
 
@@ -18,8 +18,6 @@ curl -v telnet://) telnet [MYHOST]:873
 rsync -avz [MYHOST]::[LOCAL_DIR] [REMOTE_SOURCE_DIR]
 ```
 ---
-
-# StarterPack List
 
 ## column , jq , fzf , bat ( Essential utility )
 ```bash
