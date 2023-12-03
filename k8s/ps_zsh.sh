@@ -1,3 +1,4 @@
+sudo apt install -y unzip
 sudo apt install -y zsh
 wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | bash
 #sh install.sh                    # default Y
@@ -79,13 +80,12 @@ sudo curl -sS https://webinstall.dev/k9s | bash
 sudo apt install -y bsdmainutils
 sudo apt install -y jq
 sudo apt install -y ipcalc
-sudo apt install -y tree
 sudo apt install -y duf
 
 #_____ fzf, bat
 sudo apt install -y fzf
 sudo apt install -y bat
-ln -s /usr/bin/batcat ~/.local/bin/bat 
+ln -s /usr/bin/batcat ~/bin/bat 
 echo "#_____ fzf preview config" >> ~/.zshrc
 echo "export FZF_DEFAULT_OPTS=\"--preview 'bat --theme ansi --color=always {}'\"" >> ~/.zshrc
 
