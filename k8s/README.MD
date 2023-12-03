@@ -22,13 +22,14 @@ rsync -avz [MYHOST]::[LOCAL_DIR] [REMOTE_SOURCE_DIR]
 ## column , jq , fzf , bat ( Essential utility )
 ```bash
 sudo apt install -y bsdmainutils
+sudo apt install -y unzip
 sudo apt install -y jq
 sudo apt install -y ipcalc
 sudo apt install -y fzf
 sudo apt install -y tree
 sudo apt install -y duf
 sudo apt install -y bat
-ln -s /usr/bin/batcat ~/.local/bin/bat 
+ln -s /usr/bin/batcat ~/bin/bat 
 # ~/.zshrc 
 # For Dark Background
 echo "export FZF_DEFAULT_OPTS=\"--preview 'bat --theme 1337 --color=always {}'\"" >> ~/.zshrc
