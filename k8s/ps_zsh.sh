@@ -53,6 +53,7 @@ chsh -s /usr/bin/zsh
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
+sudo ./aws/install --update
 
 #_____ kubectl
 # sudo apt install -y kubectl
