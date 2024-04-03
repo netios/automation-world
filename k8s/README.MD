@@ -72,6 +72,10 @@ unzip awscliv2.zip
 sudo ./aws/install
 sudo ./aws/install --update
 ```
+## awslogs
+```bash
+sudo pip3 install awslogs
+```
 
 ## kubectl
 ```bash
