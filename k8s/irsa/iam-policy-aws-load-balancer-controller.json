@@ -145,6 +145,11 @@
                 "arn:aws:elasticloadbalancing:*:*:loadbalancer/net/*/*",
                 "arn:aws:elasticloadbalancing:*:*:loadbalancer/app/*/*"
             ],
+            "Condition": {
+                "Null": {
+                    "aws:ResourceTag/elbv2.k8s.aws/cluster": "false"
+                }
+            }
         },
         {
             "Effect": "Allow",
