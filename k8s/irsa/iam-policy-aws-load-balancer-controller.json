@@ -26,9 +26,7 @@
                 "elasticloadbalancing:DescribeTargetGroups",
                 "elasticloadbalancing:DescribeTargetGroupAttributes",
                 "elasticloadbalancing:DescribeTargetHealth",
-                "elasticloadbalancing:DescribeTags",
-                "elasticloadbalancing:AddTags",
-                "elasticloadbalancing:RemoveTags"                
+                "elasticloadbalancing:DescribeTags"           
             ],
             "Resource": "*"
         },
@@ -149,7 +147,6 @@
             ],
             "Condition": {
                 "Null": {
-                    "aws:RequestTag/elbv2.k8s.aws/cluster": "true",
                     "aws:ResourceTag/elbv2.k8s.aws/cluster": "false"
                 }
             }
