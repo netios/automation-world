@@ -9,6 +9,13 @@ curl -sS https://raw.githubusercontent.com/netios/automation-world/main/k8s/ps_z
 # sudo usermod -aG sudo <username> # hd
 ```
 
+## zsh
+```bash
+sudo apt install zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+sed -ri "s/(^ZSH_THEME=).*/\1jonathan/g" ~/.zshrc
+```
+
 ---
 
 ## rsync
