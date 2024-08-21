@@ -68,6 +68,15 @@ sudo dpkg -i git-delta-musl_0.17.0_amd64.deb
 
 ```
 
+## glow
+```bash
+# Debian/Ubuntu
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
+echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list
+sudo apt update && sudo apt install glow
+```
+
 ## xh ( new curl )
 ```bash
 curl -sfL https://raw.githubusercontent.com/ducaale/xh/master/install.sh | sh
