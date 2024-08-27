@@ -1,50 +1,14 @@
 {
-    "rules": [
+    "Version": "2012-10-17",
+    "Statement": [
         {
-            "effect": "allow",
-            "apiGroups": [
-                ""
+            "Effect": "Allow",
+            "Action": [
+                "aps:*",
+                "eks:DescribeCluster",
+                "eks:ListClusters"
             ],
-            "resources": [
-                "nodes",
-                "nodes/proxy",
-                "nodes/metrics",
-                "services",
-                "endpoints",
-                "pods",
-                "ingresses",
-                "configmaps"
-            ],
-            "verbs": [
-                "get",
-                "list",
-                "watch"
-            ]
-        },
-        {
-            "effect": "allow",
-            "apiGroups": [
-                "extensions",
-                "networking.k8s.io"
-            ],
-            "resources": [
-                "ingresses/status",
-                "ingresses"
-            ],
-            "verbs": [
-                "get",
-                "list",
-                "watch"
-            ]
-        },
-        {
-            "effect": "allow",
-            "nonResourceURLs": [
-                "/metrics"
-            ],
-            "verbs": [
-                "get"
-            ]
+            "Resource": "*"
         }
     ]
 }
