@@ -2,10 +2,10 @@
   "Version" : "2012-10-17",
   "Statement" : [
     {
-      "Sid" : "CWACloudWatchServerPermissions",
       "Effect" : "Allow",
       "Action" : [
         "cloudwatch:PutMetricData",
+        "ec2:DescribeEC2InstanceAttributes",        
         "ec2:DescribeVolumes",
         "ec2:DescribeTags",
         "logs:PutLogEvents",
@@ -23,7 +23,6 @@
       "Resource" : "*"
     },
     {
-      "Sid" : "CWASSMServerPermissions",
       "Effect" : "Allow",
       "Action" : [
         "ssm:GetParameter"
