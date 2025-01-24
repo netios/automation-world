@@ -46,8 +46,9 @@ echo "export FZF_DEFAULT_OPTS=\"--preview 'bat --theme GitHub --color=always {}'
 source ~/.zshrc 
 
 # delta ( diff )
-xh -d https://github.com/dandavison/delta/releases/download/0.17.0/git-delta-musl_0.17.0_amd64.deb
-sudo dpkg -i git-delta-musl_0.17.0_amd64.deb
+xh -d "$(curl -s -L "https://github.com/dandavison/delta/releases/latest" | grep -oP '(?<=tag/)[\d.]+' | head -1 | xargs -I {} echo "https://github.com/dandavison/delta/releases/download/{}/git-delta_{}_amd64.deb")"
+sudo dpkg -i $(echo $(curl -s -L "https://github.com/dandavison/delta/releases/latest" | grep -oP '(?<=tag/)[\d.]+' | head -1 | xargs -I {} echo "https://github.com/dandavison/delta/releases/download/{}/git-delta_{}_amd64.deb") | xargs basename)
+
 # ~/.gitconfig
 [core]
     pager = delta
