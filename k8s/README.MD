@@ -15,7 +15,8 @@ sudo apt install zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 sed -ri "s/(^ZSH_THEME=).*/\1jonathan/g" ~/.zshrc
 ```
-
+~/.oh-my-zsh/themes
+curl -o ~/.oh-my-zsh/themes/example.zsh-theme https://raw.githubusercontent.com/username/repository/branch/path/to/example.zsh-theme
 ---
 
 ## rsync
