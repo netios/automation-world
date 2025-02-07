@@ -15,6 +15,7 @@ sudo apt install zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 curl -o ~/.oh-my-zsh/themes/sean.zsh-theme https://raw.githubusercontent.com/netios/automation-world/refs/heads/main/k8s/sean.zsh-theme
 sed -ri "s/(^ZSH_THEME=).*/\1sean/g" ~/.zshrc
+source ~/.zshrc
 ```
 
 ---
