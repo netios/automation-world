@@ -3,6 +3,8 @@
 
 ---
 
+## 컴파일 방법
+
 - **모듈 초기화 및 라이브러리 설치**
   
   Bash
@@ -27,11 +29,13 @@
   ```
   go build -o scraper main.go
   ```
-  
-- **실행**
-  
+
+## 실행 방법
+- **실행 리눅스**
+./get_nf_para_linux_amd64_v1.0.0 <워크플로우> <버전>
   Bash
   
   ```
-  ./scraper rnaseq 3.14.0
+  chmod +x get_nf_para_linux_amd64_v1.0.0
+  ./get_nf_para_linux_amd64_v1.0.0 rnaseq 3.14.0
   ```
