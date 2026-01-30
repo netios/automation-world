@@ -15,15 +15,15 @@
   
 - **의존성 정리** (소스코드에 import된 패키지를 `go.mod`에 반영)
   
-  Bash
-  ```
+  
+  ```Bash
   go mod tidy
   ```
   
 - **컴파일**
   
-  Bash
-  ```
+  
+  ```Bash
   go build -o scraper main.go
   ```
 
