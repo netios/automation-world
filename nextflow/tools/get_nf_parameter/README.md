@@ -28,12 +28,15 @@
   ```
 
 ## 실행 방법
-- **리눅스**
+- **Windowsc**
+- get_nf_para_linux_amd64_v1.0.0.exe <워크플로우> <버전>
+- **Linix**
+- get_nf_para_linux_amd64_v1.0.0 <워크플로우> <버전>
+- **Mac**
 - ./get_nf_para_linux_amd64_v1.0.0 <워크플로우> <버전>
   
   ```bash
-  chmod +x get_nf_para_linux_amd64_v1.0.0
-  ./get_nf_para_linux_amd64_v1.0.0 rnaseq 3.14.0  
+  ./get_nf_para_mac_arm64_v1.0.0 rnaseq 3.14.0  
   ```
 
   ```json
@@ -64,3 +67,5 @@
     }
   }
   ```
+
+  
