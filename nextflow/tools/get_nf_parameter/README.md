@@ -28,14 +28,14 @@
   ```
 
 ## 실행 방법
-- **Windowsc**
-- get_nf_para_linux_amd64_v1.0.0.exe <워크플로우> <버전>
-- **Linix**
-- get_nf_para_linux_amd64_v1.0.0 <워크플로우> <버전>
+- **Windows**
+  - get_nf_para_linux_amd64_v1.0.0.exe <워크플로우> <버전>
+- **Linux**
+  - get_nf_para_linux_amd64_v1.0.0 <워크플로우> <버전>
 - **Mac**
-- get_nf_para_mac_arm64_v1.0.0 <워크플로우> <버전>
+  - get_nf_para_mac_arm64_v1.0.0 <워크플로우> <버전>
 
-- [Example] rnaseq 3.14.0 버전의 parameter 값 구하기
+- [Example] rnaseq 3.14.0 버전의 parameter 값을 json을 화면으로 출력.
   
   ```dos
   get_nf_para_linux_amd64_v1.0.0.exe rnaseq 3.14.0  
