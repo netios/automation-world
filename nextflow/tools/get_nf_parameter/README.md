@@ -33,6 +33,7 @@
 - **Linix**
 - get_nf_para_linux_amd64_v1.0.0 <워크플로우> <버전>
 - **Mac**
+- [Example] rnaseq 3.14.0 버전의 parameter 값 구하기
 - ./get_nf_para_linux_amd64_v1.0.0 <워크플로우> <버전>
   
   ```bash
