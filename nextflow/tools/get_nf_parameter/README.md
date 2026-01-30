@@ -7,8 +7,8 @@
 
 - **모듈 초기화 및 라이브러리 설치**
   
-  Bash
-  ```
+  
+  ```Bash
   go mod init nf-scraper
   go get github.com/PuerkitoBio/goquery
   ```
