@@ -30,8 +30,37 @@
 ## 실행 방법
 - **리눅스**
 - ./get_nf_para_linux_amd64_v1.0.0 <워크플로우> <버전>
-  Bash
-  ```
+  
+  ```bash
   chmod +x get_nf_para_linux_amd64_v1.0.0
-  ./get_nf_para_linux_amd64_v1.0.0 rnaseq 3.14.0
+  ./get_nf_para_linux_amd64_v1.0.0 rnaseq 3.14.0  
+  ```
+
+  ```json
+  {
+    "aligner": {
+        "description": "Specify aligner to be used to map reads to reference genome.",
+        "optional": true
+    },
+    "ascat_alleles": {
+        "description": "Path to ASCAT allele zip file.",
+        "optional": true
+    },
+    "ascat_genome": {
+        "description": "ASCAT genome.",
+        "optional": true
+    },
+    "ascat_loci": {
+        "description": "Path to ASCAT loci zip file.",
+        "optional": true
+    },
+    "ascat_loci_gc": {
+        "description": "Path to ASCAT GC content correction file.",
+        "optional": true
+    },
+    "ascat_loci_rt": {
+        "description": "Path to ASCAT RT (replictiming) correction file.",
+        "optional": true
+    }
+  }
   ```
